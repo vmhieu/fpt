@@ -1,19 +1,29 @@
 
 import React from 'react';
 import '../style/home.css';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom";
 
 const Home = () => {
+
+    
     return (
         <div className='home'>
             <div className='columns' style={{display: "flex", justifyContent: "space-between"}}>
                 <div className='fpt-logo'>
                     <img src='fpt-logo.png'></img>
                 </div>
-                <div className='login'>
-                    <button className='button-login'>
-                        Login
-                    </button>
-                </div>
+                <Link to="/login">
+                    <div className='login'>
+                        <button className='button-login'>
+                            Login
+                        </button>
+                    </div>
+                </Link>
             </div>
             <hr style={{margin: 0, color: 'gray'}}/>
             <div className='home-container' style={{display: "flex", justifyContent: "space-evenly"}}> 

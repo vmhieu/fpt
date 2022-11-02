@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import './common.css';
 import GoogleLogin from 'react-google-login';
 import { gapi } from "gapi-script";
-import axios from 'axios';
 import { Select } from 'antd';
 import { apiClient } from '../request-api/api_client';
 import { useNavigate } from 'react-router-dom';

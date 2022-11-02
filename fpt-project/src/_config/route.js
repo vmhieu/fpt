@@ -1,4 +1,4 @@
-import Home from "../com/Home";
+import Home from "../components/Home";
 import Login from "../com/Login";
 import AdminScreen from "../com/admin";
 

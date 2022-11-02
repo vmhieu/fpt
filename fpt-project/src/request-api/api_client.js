@@ -1,7 +1,7 @@
 import axios from "axios";
 const request = axios.create({
-  baseURL: 'http://localhost:5002',
-  // baseURL: 'http://20.115.75.139:5002',
+  // baseURL: 'http://localhost:5002',
+  baseURL: 'https://classobservation.herokuapp.com',
   timeout: 20000,
 });
 

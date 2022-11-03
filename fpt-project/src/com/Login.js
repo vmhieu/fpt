@@ -30,7 +30,9 @@ const Login = () => {
             }
             const {data} = await apiClient.post('/auth/google' , body)
             if(data.accessToken){
-                localStorage.setItem("ACCESS_TOKEN" , data.accessToken)
+                console.log('data' ,data);
+                
+                localStorage.setItem("access_token" , data.accessToken)
                 navigation('/admin')
             }
             

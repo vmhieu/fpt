@@ -1,9 +1,9 @@
-import Home from "../components/Home";
+import Home from "../com/Home";
 import Login from "../com/Login";
-import AdminScreen from "../com/admin";
+import AdminScreen from "../com/admin/index";
 
 export const ROUTES = {
-    HOME : 'home',
+    HOME : '',
     LOGIN : 'login',
     ADMIN : 'admin'
 }

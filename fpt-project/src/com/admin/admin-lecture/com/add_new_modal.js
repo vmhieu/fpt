@@ -21,8 +21,8 @@ import {
 import styled from "styled-components";
 
 import { RenderForm } from "../render_form";
+import { openNotificationWithIcon } from "../../../../request/notification";
 import axios from "axios";
-import { openNotificationWithIcon } from "../../../request/notification";
 
 // import { ACT_TYPE } from "../const";
 // import * as services from '../services';
@@ -40,12 +40,8 @@ const ModalForm = ({
   const [loading, setLoading] = React.useState(false);
   const [img, setImg] = React.useState(null)
   // 
-
-  console.log('visible',visible);
-  
   const [form] = Form.useForm();
   // value
-  console.log(visible)
   const type = useMemo(() => get(visible, 'type', 'add'), [visible]);
   const dataInit = useMemo(() => get(visible, 'data', {}), [visible]);
   // effect
@@ -61,17 +57,7 @@ const ModalForm = ({
       setLoading(false);
     }
   };
-  useEffect(() => {
-    if(visible.data?.imageAvatar){
-      setImg(visible.data?.imageAvatar)
-    }
-  } ,[visible])
-  useEffect(() => {
-    return () => {
-      console.log("aaaa");
-      
-    }
-  } ,[])
+
   function guardarArchivo(e) {
     var file = e.target.files[0] //the file
     var reader = new FileReader() //this for convert to Base64 
@@ -92,6 +78,8 @@ const ModalForm = ({
       }
     }
   }
+console.log("img" , img);
+
   return (
     <Drawer bodyStyle={{ padding: 10 }} title={false}
       placement={'right'} closable={false} onClose={_onClose} visible={visible} width={720}>
@@ -99,9 +87,7 @@ const ModalForm = ({
       <StyledForm onFinish={onFinish} form={form} initialValues={dataInit}
         style={{ padding: '0px 10px' }} layout="vertical" >
         <Form.Item> <HeaderForm loading={loading} type={type} /> </Form.Item>
-        <input type="file" accept="image/*" id="customFile" onChange={(e) => guardarArchivo(e)} />
-        {img && <img src={`https://drive.google.com/uc?export=view&id=${img}`} style={{ width: 200, height: 200 }} />}
-        <RenderForm jsonFrom={jsonFormInput} type={type} />
+        <RenderForm jsonFrom={jsonFormInput} type={type} form={form} />
       </StyledForm>
     </Drawer>
   )
@@ -120,7 +106,7 @@ const TitleDetail = React.memo(({ _onReset, _onClose }) => {
 
 const HeaderForm = ({ loading, type, _onClose = () => { } }) => {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee',  }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', }}>
       <span style={{ fontSize: 18, fontWeight: '500' }}>{type === "EDIT" ? "Chỉnh sửa" : "Thêm mới"}</span>
       <div>
         <Button

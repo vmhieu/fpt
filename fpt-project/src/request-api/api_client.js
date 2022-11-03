@@ -6,18 +6,18 @@ const request = axios.create({
 });
 
 // Add a request interceptor
-// request.interceptors.request.use(
-//   async (config) => {
-//     // console.log("request interceptor ==== ", config);
-//     const access_token = await localStorage.getItem('access_token');
-//     if (access_token)
-//       config.headers["Authorization"] = `Bearer ${access_token}`;
-//     return config;
-//   },
-//   (error) => {
-//     Promise.reject(error);
-//   }
-// );
+request.interceptors.request.use(
+  async (config) => {
+    // console.log("request interceptor ==== ", config);
+    const access_token = await localStorage.getItem('access_token');
+    if (access_token)
+      config.headers["Authorization"] = `Bearer ${access_token}`;
+    return config;
+  },
+  (error) => {
+    Promise.reject(error);
+  }
+);
 // request.interceptors.response.use(
 //   (response) => {
 //     return response;

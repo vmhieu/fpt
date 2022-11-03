@@ -21,7 +21,7 @@ import {
 import styled from "styled-components";
 
 import { RenderForm } from "../render_form";
-import { openNotificationWithIcon } from "../../../request/notification";
+import { openNotificationWithIcon } from "../../../../request/notification";
 import axios from "axios";
 
 // import { ACT_TYPE } from "../const";
@@ -87,8 +87,6 @@ console.log("img" , img);
       <StyledForm onFinish={onFinish} form={form} initialValues={dataInit}
         style={{ padding: '0px 10px' }} layout="vertical" >
         <Form.Item> <HeaderForm loading={loading} type={type} /> </Form.Item>
-        <input type="file" accept="image/*" id="customFile" onChange={(e) => guardarArchivo(e)} />
-        {img && <img src={`https://drive.google.com/uc?export=view&id=${img}`} style={{ width: 200, height: 200 }} />}
         <RenderForm jsonFrom={jsonFormInput} type={type} form={form} />
       </StyledForm>
     </Drawer>

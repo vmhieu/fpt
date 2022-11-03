@@ -1,5 +1,4 @@
 import Login from "./com/Login";
-import AdminScreen from "./com/admin";
 import { BrowserRouter ,Routes, Route, Switch, Redirect } from "react-router-dom";
 import { public_route } from "./_config/route";
 

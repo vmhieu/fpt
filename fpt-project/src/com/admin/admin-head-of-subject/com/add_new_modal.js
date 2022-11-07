@@ -34,7 +34,6 @@ const ModalForm = ({
   jsonFormInput,
   _onClose,
   _onSubmit = () => { },
-  url = ''
 }) => {
   // state
   const [loading, setLoading] = React.useState(false);
@@ -51,6 +50,7 @@ const ModalForm = ({
     try {
       setLoading(true);
       _onSubmit(val)
+      _onClose()
       setLoading(false);
       // _onClose()
     } catch (err) {
@@ -58,31 +58,10 @@ const ModalForm = ({
     }
   };
 
-  function guardarArchivo(e) {
-    var file = e.target.files[0] //the file
-    var reader = new FileReader() //this for convert to Base64 
-    reader.readAsDataURL(e.target.files[0]) //start conversion...
-    reader.onload = async function (e) { //.. once finished..
-      var rawLog = reader.result.split(',')[1]; //extract only thee file data part
-      var dataSend = { dataReq: { data: rawLog, name: file.name, type: file.type }, fname: "uploadFilesToGoogleDrive" }; //preapre info to send to API
-      try {
-        const { data } = await axios.post("https://script.google.com/macros/s/AKfycbyGk5Dr8rE_wMO43kCYJnoxIBLuSVqXsHheABi09h_gYTpgWB0aJ_MCmtmXVlV3rEmyGA/exec", JSON.stringify(dataSend))
-        console.log('data' ,data.url.split('/')[5]);
-        
-        form.setFieldsValue({
-          imageAvatar: data.url.split('/')[5]
-        })
-        setImg(data.url.split('/')[5])
-      } catch (error) {
-        openNotificationWithIcon('error', error)
-      }
-    }
-  }
-console.log("img" , img);
 
   return (
     <Drawer bodyStyle={{ padding: 10 }} title={false}
-      placement={'right'} closable={false} onClose={_onClose} visible={visible} width={720}>
+      placement={'right'} closable={false} onClose={_onClose} visible={visible} width={650}>
       <TitleDetail _onClose={_onClose} _onReset={() => form.resetFields()} />
       <StyledForm onFinish={onFinish} form={form} initialValues={dataInit}
         style={{ padding: '0px 10px' }} layout="vertical" >

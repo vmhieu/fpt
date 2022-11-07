@@ -19,39 +19,76 @@ import { openNotificationWithIcon } from '../../../request/notification';
 // import FilterForm from './com/filter_modal';
 // import ColumnForm from './com/column_modal';
 
-const AdminTraining = () => {
+const AdminLecture = () => {
     const [selectedRow, setSelectRow] = useState([]);
     const [dataTable, setDataTable] = useState([])
-    const [url, setUrl] = useState('')
     const [total , setTotal] = useState(10)
+    const [listCampus, setListCampus] = React.useState([])
+    const [formAdd , setFormAdd] = React.useState(
+        [
+            {
+                name : 'userName',
+                label : 'Tên'
+            },
+            {
+                name : 'email',
+                label : "Email"
+            },
+            {
+                name : 'campusId',
+                label : 'Campus',
+                data : [],
+                type : 'select'
+            },
+        ]
+    )
     const [page , setPage] = useState({
         current : 1,
         number_of_page : 10
     })
     // modal
-    const [showFilter, setShowFilter] = useState(false);
     const [showAddNew, setShowAddNew] = useState(false);
     const [showDetail, setShowDetail] = useState(false);
     const [showColumn, setShowColumn] = useState(false);
     const _handleChangePage = (page, number_of_page) => {
-        // requestTable(dispatchTable, filter, { page, number_of_page })
         console.log(page, number_of_page);
         setPage({
             current : page,
             number_of_page : number_of_page
         })
     };
+    const _requestData = async () => {
+        const {data} = await apiClient.get('/api/campus-dropdown-list')
+        const convertData = data.map((i , idx) => {
+            return {
+                value : i.value,
+                label : i.name
+            }
+        })
+        setListCampus(convertData)
+        const convertDataFormAdd = formAdd.map(i => {
+            if(i.type == "select"){
+                return {
+                    ...i,
+                    data : convertData,
+                }
+            }
+            else{
+                return i
+            }
+        })
+        setFormAdd(convertDataFormAdd)
+    }
     const _requestDataTable = async () => {
         const start = page.current == 1 ? 0 : page.current*page.number_of_page - page.number_of_page
         const end = page.current*page.number_of_page
-        const { data } = await apiClient.get(`/customer?start=${start}&end=${end}`)
-        const convertData = data.customer.data.map(item => {
+        const  {data}  = await apiClient.get(`/api/admin/list-account-role?roleId=3&start=${start}&end=${end}`)
+        const convertData = data.items.map(item => {
             return {
-                key: item._id,
+                key: item.id,
                 ...item
             }
         })
-        setTotal(data.customer.total)
         setDataTable(convertData)
     }
     const _handleDel = () => {
@@ -59,7 +96,7 @@ const AdminTraining = () => {
         if (isBool) {
             selectedRow.map(async (item) => {
                 try {
-                    const { data } = await apiClient.delete(`/customer/${item}`)
+                    const { data } = await apiClient.post(`/api/admin/delete-account?id=${item}`)
                     openNotificationWithIcon("success", "Xoá thành công");
                 } catch (error) {
                     openNotificationWithIcon("error",error.message)
@@ -73,25 +110,43 @@ const AdminTraining = () => {
 
 
     const _handleAddNew = async (value) => {
-        const body = {}
+        console.log("value" ,value);
+        
+        const body = {
+            userName : value.userName,
+            email : value.email,
+            campusId : value.campusId,
+            roles : [
+                {
+                    id : 3
+                }
+            ]
+        }
         try {
-            const { data } = await apiClient.post('/customer', body)
+            const { data } = await apiClient.post('/api/admin/new-account', body)
             openNotificationWithIcon("success","Thêm thanh công")
-            setUrl(data._id)
         } catch (error) {
             openNotificationWithIcon("error","Thêm thất bại")
 
         }
 
     }
-
     const _handleUpdate = async(value) => {
         const body = {
+            id : showDetail.data.id,
+            userName : value.userName,
+            email : value.email,
+            campusId : value.campusId,
+            roles : [
+                {
+                    id : 3
+                }
+            ]
         }
         try {
-            const { data } = await apiClient.patch(`/customer/${showDetail.data.id}`, body)
+            const { data } = await apiClient.post(`/api/admin/edit-account`, body)
+            console.log("data" ,data);
             openNotificationWithIcon("success","Sửa thanh công")
-            setUrl(data._id)
         } catch (error) {
             openNotificationWithIcon("error","Sửa thất bại")
         }
@@ -103,6 +158,7 @@ const AdminTraining = () => {
     }
     useEffect(() => {
         _requestDataTable()
+        _requestData()
     }, [page])
     return (
         <div style={{}}>
@@ -120,7 +176,6 @@ const AdminTraining = () => {
             >
                 <TableCustom
                     dataSource={dataTable}
-                    // columns={configState.listColumn}
                     columns={[
                         {
                             title: 'Id',
@@ -153,9 +208,13 @@ const AdminTraining = () => {
                     }}
                     onRow={(r) => ({
                         onClick: () => {
-                            setUrl(r._id)
+                            console.log('r' ,r);
                             setShowDetail({
                                 data: {
+                                    id : r.id,
+                                    userName : r.userName,
+                                    email : r.email,
+                                    campusId: listCampus.find(i => i.label == r.campusName).value
                                 }, type: "EDIT"
                             })
                             // r.dates.split(",")
@@ -174,24 +233,24 @@ const AdminTraining = () => {
             </CardCustom>
             {/* modal */}
             <AddNewForm
-                visible={showAddNew} jsonFormInput={stateConfig.formAdd}
+                visible={showAddNew} jsonFormInput={formAdd}
                 _onClose={() => {
                     setShowAddNew(false)
-                    setUrl('')
-                    _requestDataTable()
+                    setTimeout(() => {
+                        _requestDataTable()
+                    } , 1000)
                 }}
                 _onSubmit={_handleAddNew}
-                url={url}
             />
             <ModalFormDetail
-                visible={showDetail} jsonFormInput={stateConfig.formAdd}
+                visible={showDetail} jsonFormInput={formAdd}
                 _onClose={() => {
                     setShowDetail(false)
-                    setUrl('')
-                    _requestDataTable()
+                    setTimeout(() => {
+                        _requestDataTable()
+                    } , 1000)
                 }}
                 _onSubmit={_handleUpdate}
-                url={url}
             />
         </div>
 
@@ -221,4 +280,4 @@ const Extra = ({
     )
 }
 
-export default AdminTraining;
+export default AdminLecture;

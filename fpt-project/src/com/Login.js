@@ -12,7 +12,7 @@ const Login = () => {
     
     const navigation = useNavigate()
     const _requestData = async () => {
-        const {data} = await apiClient.get('/api/campusDropdownList')
+        const {data} = await apiClient.get('/api/campus-dropdown-list')
         const convertData = data.map((i , idx) => {
             return {
                 value : i.value,

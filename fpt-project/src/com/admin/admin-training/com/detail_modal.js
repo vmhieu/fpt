@@ -55,8 +55,8 @@ const ModalForm = ({
     try {
       setLoading(true);
       _onSubmit(val)
+      _onClose()
       setLoading(false);
-      // _onClose()
     } catch (err) {
       setLoading(false);
     }
@@ -94,13 +94,11 @@ const ModalForm = ({
   }
   return (
     <Drawer bodyStyle={{ padding: 10 }} title={false}
-      placement={'right'} closable={false} onClose={_onClose} visible={visible} width={720}>
+      placement={'right'} closable={false} onClose={_onClose} visible={visible} width={650}>
       <TitleDetail _onClose={_onClose} _onReset={() => form.resetFields()} />
       <StyledForm onFinish={onFinish} form={form} initialValues={dataInit}
         style={{ padding: '0px 10px' }} layout="vertical" >
         <Form.Item> <HeaderForm loading={loading} type={type} /> </Form.Item>
-        <input type="file" accept="image/*" id="customFile" onChange={(e) => guardarArchivo(e)} />
-        {img && <img src={`https://drive.google.com/uc?export=view&id=${img}`} style={{ width: 200, height: 200 }} />}
         <RenderForm jsonFrom={jsonFormInput} type={type} />
       </StyledForm>
     </Drawer>

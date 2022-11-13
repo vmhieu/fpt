@@ -21,7 +21,7 @@ const Admin = () => {
     return (
         <div>
             <div style={{ height: 60, background: '#0a8cf1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' , marginBottom : 40 }}>
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex', width: '90', height: "80%" }}>
                     <img style={{ marginLeft: 20, marginRight: 20 }} src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/FPT_logo_2010.svg/640px-FPT_logo_2010.svg.png" height="40" />
                     <div>
                         <Button type="ghost" onClick={() => handleClick(1)} style={{ background: adminIndex == 1 ? 'yellow' : '#b1b7bb' }} shape="round" size='large'>

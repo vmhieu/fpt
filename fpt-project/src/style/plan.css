@@ -1,0 +1,80 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+
+.modal-plan{
+  justify-content: end;
+  display: flex;
+  margin-bottom: 2rem;
+}
+
+.ant-modal{
+  margin-left: 25% !important;
+}
+.ant-modal-content{
+  width: 50rem;
+}
+.form-container{
+  /* margin: 3rem 20rem 0rem 20rem; */
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+
+.form-util{
+  padding: 2rem;
+  padding-bottom: 0 !important;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-add{
+  padding-top: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.button-submit{
+  display: flex;
+  justify-content: center;
+  margin-left: 3rem;
+}
+.button-remove{
+  margin-left: -3rem;
+}
+.ant-form-item{
+  padding-right: 4rem;
+}
+.ant-form-item-row{
+  width: 16rem;
+  margin-right: 4rem;
+}
+.ant-picker{
+  width: 92%;
+}
+/* .ant-btn{
+  width: 100%;
+} */
+.ant-select.ant-select-in-form-item{
+  width: 13rem !important;
+}
+
+.form-detail{
+  margin: 2rem;
+  border: 0px solid black;
+  border-radius: 10px;
+  background-color: #FFE4B5;
+  /* margin-bottom: 2rem ; */
+}
+
+.detail{
+  padding-left: 4rem;
+  padding-top: 2rem;
+}
+
+.form-slot{
+  padding-top: 3rem;
+}
+
+/* .ant-form-item{
+  padding-right: 4rem;
+} */

@@ -4,7 +4,6 @@ import '../../style/plan.css';
 
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import ObservationPlanForm from './ObservationPlanForm';
 import Header from '../Header';
 import { apiClient } from '../../request-api/api_client';
 import { Autocomplete, TextField } from '@mui/material';

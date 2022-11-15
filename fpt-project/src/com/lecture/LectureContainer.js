@@ -1,36 +1,36 @@
-import { Button, Modal, Table } from 'antd';
+import { Modal, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-import ModalPlanContainer from './ModalPlanContainer';
-import '../../style/plan.css';
-import { apiClient } from '../../request-api/api_client';
-import Header from '../Header';
 import { useNavigate } from 'react-router-dom';
+import { apiClient } from '../../request-api/api_client';
+import '../../style/lecture.css'
+import Header from '../Header';
+import LectureDetailContainer from './LectureDetailContainer';
+const LectureContainer = () => {
 
-
-
-const PlanContainer = () => {
-  const navigation = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [listPlan, setListPlan] = useState();
+  const [listData, setListData] = useState();
   const [listSemesters, setListSemesters] = useState();
   const [semesterId, setSemesterId] = useState(1);
-  const userId = true ? 14 : localStorage.getItem('userId');
-
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [detail, setDetail] = useState();
+  const campusId = localStorage.getItem('campusId');
+  const userId = true ? 15 : localStorage.getItem('userId');
+  const navigation = useNavigate();
   const _requestData = async () => {
-    const {data} = await apiClient.get(`/api/list-observation-slot?semesterId=${semesterId}&accountId=${userId}`)
-     data.items = data.items.map((item, idx) => {
+    const {data} = await apiClient.get(`/api/lecture/list-observation-review?campusId=${campusId}&semesterId=${semesterId}&accountId=${userId}`)
+    data.items = data.items.map((item, idx) => {
       var date = new Date(`${item.slotTime}`);
         item.slotTime =
         ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear();
         return item;
     })
-    setListPlan(data.items);
+    setListData(data.items);
     console.log("convert: ", data.items);
   }
 
   const getSemesters = async () => {
     const {data} = await apiClient.get('/api/semester-list')
+    
     setListSemesters(data);
     console.log("semesterList: ", data.items);
   }
@@ -38,13 +38,12 @@ const PlanContainer = () => {
   useEffect(() => {
     getSemesters()
   }, [])
-  
   useEffect(() => {
     _requestData();
   }, [semesterId])
-
-  const showModal = () => {
+  const showModal = (record) => {
     setOpen(true);
+    setDetail(record);
   };
   const handleOk = () => {
     setLoading(true);
@@ -56,6 +55,7 @@ const PlanContainer = () => {
   const handleCancel = () => {
     setOpen(false);
   };
+
   const columns = [
     {
       title: 'Id',
@@ -63,9 +63,14 @@ const PlanContainer = () => {
       key: 'id',
     },
     {
-      title: 'Tên GV',
-      dataIndex: 'userName',
-      key: 'userName',
+      title: 'Tên GV được dự giờ',
+      dataIndex: 'lectureName',
+      key: 'lectureName',
+    },
+    {
+      title: 'Ca học',
+      dataIndex: 'slotName',
+      key: 'slotName',
     },
     {
       title: 'Thời gian',
@@ -73,47 +78,37 @@ const PlanContainer = () => {
       key: 'slotTime',
     },
     {
-      title: 'Ca học',
-      dataIndex: 'slot',
-      key: 'slot',
-    },
-    {
-      title: 'Phòng học',
-      dataIndex: 'roomName',
-      key: 'roomName',
-    },
-    {
-      title: 'Mã môn',
-      dataIndex: 'subjectCode',
-      key: 'subjectCode',
-    },
-    {
-      title: 'Tên môn',
-      dataIndex: 'subjectName',
-      key: 'subjectName',
-    },
-    {
       title: 'Lớp',
       dataIndex: 'className',
       key: 'className',
     },
     {
-      title: 'Lý do',
-      dataIndex: 'reason',
-      key: 'reason',
+      title: 'Phòng',
+      dataIndex: 'roomName',
+      key: 'roomName',
     },
     {
-      title: 'Kết quả',
-      key: 'result',
-      dataIndex: 'result',
-      render: (text, record) => (
-       <button onClick={() => handleNavigation(record)}>
-         {"Kết quả"}
-       </button>
-      ),
+      title: 'Tên môn học',
+      dataIndex: 'subjectName',
+      key: 'subjectName',
     },
-    
+    {
+      title: 'Bộ môn',
+      dataIndex: 'departmentName',
+      key: 'departmentName',
+    },
+    {
+      title: 'Chi tiết',
+      dataIndex: 'totalPoint',
+      key: 'totalPoint',
+      render: (text, record) => (
+        <button onClick={() => showModal(record)}>
+          {"Chi tiết"}
+        </button>
+       ),
+    },
   ];
+
   const semesterColums = [
     {
       title: 'Kì học',
@@ -128,41 +123,32 @@ const PlanContainer = () => {
   ]
 
   const handleNavigation = (record) => {
-    navigation(`/plan/${record.id}`);
+    navigation(`/lecture/${record.id}`);
   }
-  
   return (
-    <>
-    <Header />
-    <div className='plan-container'>
-      <div className='modal-plan'>
-        <Button type="primary" onClick={showModal}>
-          Tạo kế hoạch dự giờ
-        </Button>
+    <div>
+        <Header />
+        <p className='has-text-centered has-text-weight-bold is-size-3'>Danh sách đi dự giờ của giảng viên</p>
         <Modal
           open={open}
-          title="Tạo kế hoạch dự giờ"
+          title="Chi tiết"
           onOk={handleOk}
           onCancel={handleCancel}
           footer={null}
           >
-          <ModalPlanContainer />
+          <LectureDetailContainer data={detail} />
         </Modal>
-      </div>
-      <div className='columns'>
+        <div className='columns'>
           <div className='column ml-4 is-1 mr-6'>
               {listSemesters?.length > 0 && <Table columns={semesterColums} dataSource={listSemesters} pagination={false}/>}
+
           </div>
           <div className='column'>
-              {listPlan?.length > 0 && <Table columns={columns} dataSource={listPlan} />}
+              {listData?.length > 0 && <Table columns={columns} dataSource={listData} />}
           </div>
         </div>
-      </div>
-    </>
+    </div>
   );
 };
-export default PlanContainer;
 
-
-
-
+export default LectureContainer;

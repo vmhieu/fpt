@@ -23,38 +23,47 @@ export const public_route = [
     {
         path: `/${ROUTES.HOME}`,
         Com: Home,
+        role : [1 ,2 ,3]
     },
     {
         path: `/${ROUTES.LOGIN}`,
         Com: Login,
+        role : [1 ,2 ,3]
     },
     {
         path : `/${ROUTES.ADMIN}`,
-        Com : AdminScreen
+        Com : AdminScreen,
+        role : [1]
     },
     {
         path: `/404`,
         Com: () => <div>2223</div>,
+        role : [1 ,2 ,3]
     },
     {
         path: `/${ROUTES.HEADOFSECTIONPLAN}`,
-        Com: PlanContainer
+        Com: PlanContainer,
+        role : [2]
     },
     {
         path: `/${ROUTES.PLAN_DETAIL}`,
-        Com: PlanDetailContainer
+        Com: PlanDetailContainer,
+        role : [2]
     },
     {
         path: `/${ROUTES.LECTURE}`,
-        Com: LectureContainer
+        Com: LectureContainer,
+        role : [3]
     },
     {
         path: `/${ROUTES.LECTURE_DETAIL}`,
-        Com: LectureDetailContainer
+        Com: LectureDetailContainer,
+        role : [3]
     },
     {
         path: `/${ROUTES.TRAINING}`,
-        Com: TrainingContainer
+        Com: TrainingContainer,
+        role : [3]
     }
 
 ];

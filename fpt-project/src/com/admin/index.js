@@ -4,6 +4,7 @@ import { UserOutlined } from '@ant-design/icons';
 import AdminLecture from './admin-lecture';
 import AdminHOS from './admin-head-of-subject';
 import AdminTraining from './admin-training';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -18,6 +19,7 @@ const Admin = () => {
     const handleClick = (idx) => {
         setAdminIndex(idx)
     }
+    const navigation = useNavigate()
     return (
         <div>
             <div style={{ height: 60, background: '#0a8cf1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' , marginBottom : 40 }}>
@@ -43,7 +45,10 @@ const Admin = () => {
                     <div style={{marginLeft: 20, marginRight: 20}}>
                         <UserOutlined height='60px' />
                     </div>
-                    <div style={{marginRight : 20 , cursor : 'pointer'}}>
+                    <div onClick={() => {
+                        localStorage.clear()
+                        navigation('/login')
+                    }} style={{marginRight : 20 , cursor : 'pointer'}}>
                         LogOut
                     </div>
                 </div>

@@ -7,11 +7,9 @@ import { openNotificationWithIcon } from '../../request/notification';
 const TrainingChangeContainer = (props) => {
   const [listData, setListData] = useState();
   const campusId = localStorage.getItem('campusId');
-  const [isUpdate, setIsUpdate] = useState(false);
   const [count, setCount] = useState(-1);
   const [value, setValue] = useState('');
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [create, setCreate] = useState('');
 
   const handleCreate = () => {

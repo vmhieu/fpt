@@ -12,7 +12,6 @@ const PlanDetailContainer = () => {
   const _requestData = async () => {
     const {data} = await apiClient.get(`/api/result-observation-slot?oSlotId=${id}`)
     setListData(data.items);
-    console.log("convert: ", data.items);
   }
   
   useEffect(() => {

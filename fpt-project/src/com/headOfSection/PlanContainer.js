@@ -15,7 +15,7 @@ const PlanContainer = () => {
   const [listPlan, setListPlan] = useState();
   const [listSemesters, setListSemesters] = useState();
   const [semesterId, setSemesterId] = useState(1);
-  const userId = true ? 14 : localStorage.getItem('userId');
+  const userId = localStorage.getItem('userId');
 
   const _requestData = async () => {
     const {data} = await apiClient.get(`/api/list-observation-slot?semesterId=${semesterId}&accountId=${userId}`)
@@ -26,13 +26,11 @@ const PlanContainer = () => {
         return item;
     })
     setListPlan(data.items);
-    console.log("convert: ", data.items);
   }
 
   const getSemesters = async () => {
     const {data} = await apiClient.get('/api/semester-list')
     setListSemesters(data);
-    console.log("semesterList: ", data.items);
   }
   
   useEffect(() => {

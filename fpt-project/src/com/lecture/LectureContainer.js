@@ -14,7 +14,7 @@ const LectureContainer = () => {
   const [loading, setLoading] = useState(false);
   const [detail, setDetail] = useState();
   const campusId = localStorage.getItem('campusId');
-  const userId = true ? 15 : localStorage.getItem('userId');
+  const userId = localStorage.getItem('userId');
   const navigation = useNavigate();
   const _requestData = async () => {
     const {data} = await apiClient.get(`/api/lecture/list-observation-review?campusId=${campusId}&semesterId=${semesterId}&accountId=${userId}`)
@@ -25,14 +25,11 @@ const LectureContainer = () => {
         return item;
     })
     setListData(data.items);
-    console.log("convert: ", data.items);
   }
 
   const getSemesters = async () => {
     const {data} = await apiClient.get('/api/semester-list')
-    
     setListSemesters(data);
-    console.log("semesterList: ", data.items);
   }
   
   useEffect(() => {
@@ -122,9 +119,6 @@ const LectureContainer = () => {
     },
   ]
 
-  const handleNavigation = (record) => {
-    navigation(`/lecture/${record.id}`);
-  }
   return (
     <div>
         <Header />

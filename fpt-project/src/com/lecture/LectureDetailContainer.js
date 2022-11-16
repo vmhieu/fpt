@@ -8,7 +8,6 @@ import Header from '../Header';
 const LectureDetailContainer = (props) => {
   const {data} = props;
   const [form] = Form.useForm();
-  console.log("data:  ", data);
   const campusId = localStorage.getItem('campusId');
   const userId = localStorage.getItem('userId');
   const [listData, setListData] = useState();
@@ -18,7 +17,6 @@ const LectureDetailContainer = (props) => {
   const _requestData = async () => {
     const {data} = await apiClient.get(`/api/training/list-criteria-campus?id=${campusId}`)
     setListData(data.items);
-    console.log("convert: ", data.items);
   }
 
   useEffect(() => {
@@ -63,7 +61,6 @@ const LectureDetailContainer = (props) => {
     const data = {...fieldValues, ...values, "observationDetailRequests": observation};
     console.log("dataaaaaaaa:", data);
     apiClient.post(`/api/lecture/create-observation-review`, data)
-    // handleSubmit(data);
   };
   return (
     <div>

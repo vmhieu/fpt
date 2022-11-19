@@ -31,11 +31,18 @@ const Login = () => {
             const {data} = await apiClient.post('/auth/google' , body)
             if(data.accessToken){
                 console.log('data' ,data);
+                const role = data.setRole.map(i => i.id)
+                console.log("role" , role);
                 
                 localStorage.setItem("access_token" , data.accessToken)
                 localStorage.setItem("campusId", data.campusId)
+<<<<<<< HEAD
                 localStorage.setItem("userId", data.userId)
                 localStorage.setItem("userName", data.userName)
+=======
+                localStorage.setItem("role", JSON.stringify(role))
+
+>>>>>>> 1308a962a4a36e27733c365ee2315d20e9e26482
                 navigation('/admin')
             }
             

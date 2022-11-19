@@ -2,6 +2,7 @@ import React from 'react';
 import { UserOutlined } from '@ant-design/icons';
 
 const Header = () => {
+    const userName = localStorage.getItem("userName")
   return (
     <div style={{ height: 60, background: '#0a8cf1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' , marginBottom : 40 }}>
         <div style={{ display: 'flex', width: '90', height: "80%" }}>
@@ -10,7 +11,7 @@ const Header = () => {
 
         <div style={{ display: 'flex', color: 'black', fontSize: 24, fontWeight: 500 }}>
             <div>
-                ThangNg
+                {userName}
             </div>
             <div style={{marginLeft: 20, marginRight: 20}}>
                 <UserOutlined height='60px' />

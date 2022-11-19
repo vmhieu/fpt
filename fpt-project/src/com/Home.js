@@ -13,7 +13,7 @@ const Home = () => {
     
     return (
         <div className='home'>
-            <div className='columns' style={{display: "flex", justifyContent: "space-between"}}>
+            <div className='columns' style={{display: "flex", justifyContent: "space-between", marginTop: "0.75rem"}}>
                 <div className='fpt-logo'>
                     <img src='fpt-logo.png'></img>
                 </div>
@@ -30,9 +30,11 @@ const Home = () => {
                 <div className='title'>
                     <h1 >Social Constructive Learning</h1>
                     <h3 className='content'>Construct knowledge and personalize the learning way to empower learners' full potential.</h3>
-                    <button className='button-join'>
-                        Join now
-                    </button>
+                    <Link to="/login">
+                        <button className='button-join'>
+                            Login
+                        </button>
+                </Link>
                 </div>
                 <div>
                     <img src='education.png'></img>

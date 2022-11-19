@@ -35,7 +35,7 @@ const Login = () => {
                 localStorage.setItem("access_token" , data.accessToken)
                 localStorage.setItem("campusId", data.campusId)
                 localStorage.setItem("userId", data.userId)
-
+                localStorage.setItem("userName", data.userName)
                 navigation('/admin')
             }
             

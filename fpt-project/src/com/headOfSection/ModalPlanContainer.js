@@ -19,6 +19,7 @@ const ModalPlanContainer = () => {
   const [roomOptions, setRoomOptions] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const [accounts, setAccounts] = useState([]);
+  const [slot, setSlot] = useState([]);
 
   const getDepartments = async (searchText) => {
     const {data} = await apiClient.get(`/api/list-department?id=${campusId}&name=${searchText}`)
@@ -28,6 +29,10 @@ const ModalPlanContainer = () => {
   const getSemesters = async () => {
     const {data} = await apiClient.get('/api/semester-list')
     setSemesters(data);
+  }
+  const getSlot = async () => {
+    const {data} = await apiClient.get('/api/slot-list')
+    setSlot(data);
   }
   const getSubjects = async () => {
     const {data} = await apiClient.get(`/api/subject-dropdown-list?id=${campusId}&code=`)
@@ -50,12 +55,12 @@ const ModalPlanContainer = () => {
     setAccounts(data.items);
   }
 
-  console.log("accounts: ", accounts);
   useEffect(() => {
     getSubjects();
     getRooms();
     getSemesters();
     getAccounts();
+    getSlot();
   }, [])  
   
   
@@ -224,7 +229,7 @@ const ModalPlanContainer = () => {
                             },
                           ]}
                           >
-                          <Select className='select-box' options={accounts} onChange={handleChange} />
+                          <Select className='select-box' options={slot} onChange={handleChange} />
                         </Form.Item>
                       )}
                     </Form.Item>

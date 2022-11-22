@@ -23,16 +23,24 @@ const ModalPlanContainer = () => {
 
   const getDepartments = async (searchText) => {
     const {data} = await apiClient.get(`/api/list-department?id=${campusId}&name=${searchText}`)
-    return data.items[0].value;
+    return data[0].value;
   }
 
   const getSemesters = async () => {
     const {data} = await apiClient.get('/api/semester-list')
-    setSemesters(data);
+    var rooms = data;
+    rooms = rooms.map((item, idx) => {
+      return {...item, label: item.name}
+    })
+    setSemesters(rooms);
   }
   const getSlot = async () => {
     const {data} = await apiClient.get('/api/slot-list')
-    setSlot(data);
+    var rooms = data;
+    rooms = rooms.map((item, idx) => {
+      return {...item, label: item.name}
+    })
+    setSlot(rooms);
   }
   const getSubjects = async () => {
     const {data} = await apiClient.get(`/api/subject-dropdown-list?id=${campusId}&code=`)
@@ -52,7 +60,11 @@ const ModalPlanContainer = () => {
   }
   const getAccounts = async () => {
     const {data} = await apiClient.get(`/api/list-account?id=${campusId}&email=`)
-    setAccounts(data.items);
+    var rooms = data;
+    rooms = rooms.map((item, idx) => {
+      return {...item, label: item.name}
+    })
+    setAccounts(rooms);
   }
 
   useEffect(() => {
@@ -82,6 +94,7 @@ const ModalPlanContainer = () => {
 
   const onFinish = (fieldValues) => {
     var observationSlotsRequest = fieldValues.observationSlotsRequest;
+    // console.log("observationSlotsRequest: ", observationSlotsRequest);
     observationSlotsRequest = observationSlotsRequest.map((item) => {
       var date = new Date(item.slotTime._d),
       mnth = ("0" + (date.getMonth() + 1)).slice(-2),
@@ -99,9 +112,9 @@ const ModalPlanContainer = () => {
         ...values,
         "campusId": parseInt(campusId),
         "departmentId": result,
-        "planStatus":null
+        // "planStatus":null
       }
-      postPlan(finalValues);
+      // postPlan(finalValues);
       console.log("valuesssssssssssss: ", finalValues);
     })
   };
@@ -109,11 +122,57 @@ const ModalPlanContainer = () => {
   const postPlan = (values) => {
     apiClient.post(`/api/create-observation-plan`, values)
   }
-  
+  // const [validateArray, setValidateArray] = useState([]);
   const handleChange = () => {
     form.setFieldsValue({
     });
   };
+  const [array, setArray] = useState([0, 0, 0, 0]);
+  // const [account1, setAccount1] = useState();
+  // const [account2, setAccount2] = useState();
+  // const [account, setAccount] = useState();
+  // const [headTraining, setHeadTraining] = useState();
+  const [options, setOptions] = useState([]);
+  const onAccountSearch = async (searchText) => {
+    const {data} = await apiClient.get(`/api/list-account?id=${campusId}&email=${searchText}`)
+    const searchData = [];
+    if (!searchText) {
+      searchData = [];
+    }
+    if(data && data.length > 0){
+      for(let i = 0; i < data.length; i++){
+        searchData.push({label: data[i].name, value: data[i].value})
+
+      }
+    }
+    setOptions(
+      !searchText ? [] : searchData,
+    );
+  };
+  const onSubjectSearch = async (searchText) => {
+    const {data} = await apiClient.get(`/api/subject-dropdown-list?id=${campusId}&code=${searchText}`)
+    const searchData = [];
+    if (!searchText) {
+      searchData = [];
+    }
+    if(data && data.length > 0){
+      for(let i = 0; i < data.length; i++){
+        searchData.push({label: data[i].name, value: data[i].value})
+
+      }
+    }
+    setOptions(
+      !searchText ? [] : searchData,
+    );
+  };
+  const onSelect = (value, index) => {
+    console.log('onSelect', value, index);
+    const list = [...array];
+    list[index] = value;
+    setArray(list);
+  };
+  console.log("22222222222222222", array);
+  
   return (
     <div>
     <div className='form-container'>
@@ -141,8 +200,6 @@ const ModalPlanContainer = () => {
             },
           ]}
         >
-          {/* <Select options={semesters} onChange={handleChange} /> */}
-          
           <AutoComplete
             options={departmentOptions}
             value={departmentValue}
@@ -157,8 +214,8 @@ const ModalPlanContainer = () => {
       <Form.List name="observationSlotsRequest">
         {(fields, { add, remove }) => (
           <>
-            {fields.map((field) => (
-              <div className='form-detail'>
+            {fields.map((field, index) => (
+              <div className='form-detail' key={index}>
               <Space key={field.key} align="start">
                 <div className='form-slot'>
                   <div className='form-util'>
@@ -177,9 +234,26 @@ const ModalPlanContainer = () => {
                               required: true,
                               message: 'Missing sight',
                             },
+                            ({ getFieldValue }) => ({
+                              validator(rule, value) {
+                                if (array.filter(item => item == value).length > 1) {
+                                  return Promise.reject("Không được trùng");
+                                } 
+                              }
+                            })
                           ]}
                           >
-                          <Select className='select-box' options={accounts} onChange={handleChange} />
+                            <AutoComplete
+                              options={options}
+                              style={{
+                                width: 200,
+                              }}
+                              onSearch={onAccountSearch}
+                              onSelect={(value) => onSelect(value, 0)}
+                              onChange={handleChange}
+                              placeholder="input here"
+                            />
+                          {/* <Select className='select-box' options={accounts} onChange={handleChange} /> */}
                         </Form.Item>
                       )}
                     </Form.Item>
@@ -202,7 +276,16 @@ const ModalPlanContainer = () => {
                             },
                           ]}
                           >
-                          <Select className='select-box' options={subjectOptions} onChange={handleChange} />
+                            <AutoComplete
+                              options={options}
+                              style={{
+                                width: 200,
+                              }}
+                              onSearch={onSubjectSearch}
+                              onChange={handleChange}
+                              placeholder="input here"
+                            />
+                          {/* <Select className='select-box' options={subjectOptions} onChange={handleChange} /> */}
                           
                         </Form.Item>
                       )}
@@ -245,7 +328,9 @@ const ModalPlanContainer = () => {
                       },
                     ]}
                   >
-                    <DatePicker />
+                    <DatePicker disabledDate={(current) => {
+                      return moment().add(-1, 'days')  >= current 
+                      }}/>
                   </Form.Item> 
                     
                  </div>
@@ -298,9 +383,26 @@ const ModalPlanContainer = () => {
                               required: true,
                               message: 'Missing sight',
                             },
+                            ({ getFieldValue }) => ({
+                              validator(rule, value) {
+                                if (array.filter(item => item == value).length > 1) {
+                                  return Promise.reject("Không được trùng");
+                                } 
+                              }
+                            })
                           ]}
                           >
-                          <Select className='select-box' options={accounts} onChange={handleChange} />
+                            <AutoComplete
+                              options={options}
+                              style={{
+                                width: 200,
+                              }}
+                              onSearch={onAccountSearch}
+                              onSelect={(value) => onSelect(value, 1)}
+                              onChange={handleChange}
+                              placeholder="input here"
+                            />
+                          {/* <Select className='select-box' options={accounts} onChange={handleChange} /> */}
                         </Form.Item>
                       )}
                     </Form.Item>
@@ -320,9 +422,26 @@ const ModalPlanContainer = () => {
                               required: true,
                               message: 'Missing accountId2',
                             },
+                            ({ getFieldValue }) => ({
+                              validator(rule, value) {
+                                if (array.filter(item => item == value).length > 1) {
+                                  return Promise.reject("Không được trùng");
+                                } 
+                              }
+                            })
                           ]}
                           >
-                          <Select className='select-box' options={accounts} onChange={handleChange} />
+                            <AutoComplete
+                              options={options}
+                              style={{
+                                width: 200,
+                              }}
+                              onSearch={onAccountSearch}
+                              onSelect={(value) => onSelect(value, 2)}
+                              onChange={handleChange}
+                              placeholder="input here"
+                            />
+                          {/* <Select className='select-box' options={accounts} onChange={handleChange} /> */}
                         </Form.Item>
                       )}
                     </Form.Item>
@@ -352,15 +471,32 @@ const ModalPlanContainer = () => {
                         <Form.Item
                         {...field}
                         label="headTraining"
-                        name={[field.name, 'headTraining']}
+                        name={[field.name , 'headTraining']}
                         rules={[
                           {
                               required: true,
                               message: 'Missing headTraining',
                             },
+                            ({ getFieldValue }) => ({
+                              validator(rule, value) {
+                                if (array.filter(item => item == value).length > 1) {
+                                  return Promise.reject("Không được trùng");
+                                } 
+                              }
+                            })
                           ]}
                           >
-                          <Select className='select-box' options={accounts} onChange={handleChange} />
+                            <AutoComplete
+                              options={options}
+                              style={{
+                                width: 200,
+                              }}
+                              onSelect={(value) => onSelect(value, 3)}
+                              onSearch={onAccountSearch}
+                              onChange={handleChange}
+                              placeholder="input here"
+                            />
+                          {/* <Select className='select-box' options={accounts} onChange={handleChange} /> */}
                         </Form.Item>
                       )}
                     </Form.Item>

@@ -94,7 +94,6 @@ const ModalPlanContainer = () => {
 
   const onFinish = (fieldValues) => {
     var observationSlotsRequest = fieldValues.observationSlotsRequest;
-    // console.log("observationSlotsRequest: ", observationSlotsRequest);
     observationSlotsRequest = observationSlotsRequest.map((item) => {
       var date = new Date(item.slotTime._d),
       mnth = ("0" + (date.getMonth() + 1)).slice(-2),
@@ -112,9 +111,8 @@ const ModalPlanContainer = () => {
         ...values,
         "campusId": parseInt(campusId),
         "departmentId": result,
-        // "planStatus":null
       }
-      // postPlan(finalValues);
+      postPlan(finalValues);
       console.log("valuesssssssssssss: ", finalValues);
     })
   };
@@ -122,16 +120,11 @@ const ModalPlanContainer = () => {
   const postPlan = (values) => {
     apiClient.post(`/api/create-observation-plan`, values)
   }
-  // const [validateArray, setValidateArray] = useState([]);
   const handleChange = () => {
     form.setFieldsValue({
     });
   };
   const [array, setArray] = useState([0, 0, 0, 0]);
-  // const [account1, setAccount1] = useState();
-  // const [account2, setAccount2] = useState();
-  // const [account, setAccount] = useState();
-  // const [headTraining, setHeadTraining] = useState();
   const [options, setOptions] = useState([]);
   const onAccountSearch = async (searchText) => {
     const {data} = await apiClient.get(`/api/list-account?id=${campusId}&email=${searchText}`)
@@ -166,12 +159,10 @@ const ModalPlanContainer = () => {
     );
   };
   const onSelect = (value, index) => {
-    console.log('onSelect', value, index);
     const list = [...array];
     list[index] = value;
     setArray(list);
   };
-  console.log("22222222222222222", array);
   
   return (
     <div>

@@ -2,6 +2,7 @@ import { Modal, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../request-api/api_client';
+import { openNotificationWithIcon } from '../../request/notification';
 import '../../style/lecture.css'
 import Header from '../Header';
 import TrainingChangeContainer from './TrainingChangeContainer';
@@ -59,9 +60,9 @@ const TrainingContainer = () => {
 
   const columns = [
     {
-      title: 'Id',
-      dataIndex: 'id',
-      key: 'id',
+      title: 'STT',
+      dataIndex: 'stt',
+      render: (text, record, index) => index + 1,
     },
     {
       title: 'Bộ môn',
@@ -93,8 +94,50 @@ const TrainingContainer = () => {
         </button>
        ),
     },
+    {
+      title: 'Đồng ý',
+      dataIndex: 'totalPoint',
+      key: 'totalPoint',
+      render: (text, record) => (
+        {...record.planStatus == 0 ? 
+          <button {...record.planStatus != 0 ? 'disabled' : ''} onClick={() => reject(record)}>
+            {"Đồng ý"}
+          </button>
+          : null}
+       ),
+    },
+    {
+      title: 'Từ chối',
+      dataIndex: 'totalPoint',
+      key: 'totalPoint',
+      render: (text, record) => (
+        {...record.planStatus == 0 ? 
+        <button {...record.planStatus != 0 ? 'disabled' : ''} onClick={() => reject(record)}>
+          {"Từ chối"}
+        </button>
+        : null}
+       ),
+    },
   ];
 
+  const approved = async (record) => {
+    const {data} = await apiClient.post(`/api/approve-observation-plan?planId=${record.id}&statusId=1`);
+    if(data.status == 200){
+      openNotificationWithIcon("success", "Duyệt thành công")
+      _requestData();
+    } else {
+      openNotificationWithIcon("error", "Thất bại")
+    }
+  }
+  const reject = async (record) => {
+    const {data} = await apiClient.post(`/api/approve-observation-plan?planId=${record.id}&statusId=2`);
+    if(data.status == 200){
+      openNotificationWithIcon("success", "Từ chối thành công")
+      _requestData();
+    } else {
+      openNotificationWithIcon("error", "Thất bại")
+    }
+  }
   const semesterColums = [
     {
       title: 'Kì học',

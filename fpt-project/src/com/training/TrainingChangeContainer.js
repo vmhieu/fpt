@@ -76,8 +76,7 @@ const TrainingChangeContainer = (props) => {
   return (
     <div>
       <div className='columns'>
-        <div className='column is-1'>Id</div>
-        <div className='column is-2'>Mã code</div>
+        <div className='column is-1'>STT</div>
         <div className='column'>Tên tiêu chí</div>
         <div className='column is-2'></div>
         <div className='column is-2'>
@@ -93,8 +92,7 @@ const TrainingChangeContainer = (props) => {
       {listData && listData.map((item, idx) => {
         return(
           <div className='columns' key={idx}>
-            <div className='column is-1'>{item.id}</div>
-            <div className='column is-2'>{item.criteriaCode}</div>
+            <div className='column is-1'>{idx + 1}</div>
             <div className='column'>
               {count == idx ? <input bordered={false} value={value} autoFocus={true} onChange={onChange} style={{width: "100%"}} /> : <p>{item.criteriaName}</p>}
               </div>

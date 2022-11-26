@@ -6,6 +6,7 @@ import { openNotificationWithIcon } from '../../request/notification';
 import '../../style/lecture.css'
 import Header from '../Header';
 import TrainingChangeContainer from './TrainingChangeContainer';
+import TrainingDetail from './TrainingDetail';
 
 const TrainingContainer = () => {
   
@@ -13,6 +14,9 @@ const TrainingContainer = () => {
   const [listSemesters, setListSemesters] = useState();
   const [semesterId, setSemesterId] = useState(1);
   const [open, setOpen] = useState(false);
+  const [openDetail, setOpenDetail] = useState(false);
+  const [detail, setDetail] = useState({});
+
   const [loading, setLoading] = useState(false);
   const campusId = localStorage.getItem('campusId');
   const userId = true ? 15 : localStorage.getItem('userId');
@@ -47,15 +51,25 @@ const TrainingContainer = () => {
   const showModal = (record) => {
     setOpen(true);
   };
+  const showDetail = (record) => {
+    setDetail(record);
+  };
+
+  useEffect(() => {
+    setOpenDetail(true);
+  }, [detail.id])
+  console.log("detail: ", detail);
   const handleOk = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setOpen(false);
+    setOpenDetail(false);
+    setOpen(false);
     }, 3000);
   };
   const handleCancel = () => {
     setOpen(false);
+    setOpenDetail(false);
   };
 
   const columns = [
@@ -89,7 +103,7 @@ const TrainingContainer = () => {
       dataIndex: 'totalPoint',
       key: 'totalPoint',
       render: (text, record) => (
-        <button onClick={() => showModal(record)}>
+        <button onClick={() => showDetail(record)}>
           {"Chi tiết"}
         </button>
        ),
@@ -166,6 +180,15 @@ const TrainingContainer = () => {
           footer={null}
           >
           <TrainingChangeContainer data={listData} />
+        </Modal>
+        <Modal
+          open={openDetail}
+          title="Chi tiết"
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={null}
+          >
+          {detail && <TrainingDetail data={detail} />}
         </Modal>
         <div className='columns'>
           <div className='column ml-4 is-1 mr-6'>

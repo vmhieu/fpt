@@ -1,10 +1,12 @@
-import { Modal, Table } from 'antd';
+import { Modal, Table, Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../request-api/api_client';
+import { openNotificationWithIcon } from '../../request/notification';
 import '../../style/lecture.css'
 import Header from '../Header';
 import TrainingChangeContainer from './TrainingChangeContainer';
+import TrainingDetail from './TrainingDetail';
 
 const TrainingContainer = () => {
   
@@ -12,6 +14,9 @@ const TrainingContainer = () => {
   const [listSemesters, setListSemesters] = useState();
   const [semesterId, setSemesterId] = useState(1);
   const [open, setOpen] = useState(false);
+  const [openDetail, setOpenDetail] = useState(false);
+  const [detail, setDetail] = useState({});
+
   const [loading, setLoading] = useState(false);
   const campusId = localStorage.getItem('campusId');
   const userId = true ? 15 : localStorage.getItem('userId');
@@ -46,22 +51,32 @@ const TrainingContainer = () => {
   const showModal = (record) => {
     setOpen(true);
   };
+  const showDetail = (record) => {
+    setDetail(record);
+  };
+
+  useEffect(() => {
+    setOpenDetail(true);
+  }, [detail.id])
+  console.log("detail: ", detail);
   const handleOk = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setOpen(false);
+    setOpenDetail(false);
+    setOpen(false);
     }, 3000);
   };
   const handleCancel = () => {
     setOpen(false);
+    setOpenDetail(false);
   };
 
   const columns = [
     {
-      title: 'Id',
-      dataIndex: 'id',
-      key: 'id',
+      title: 'STT',
+      dataIndex: 'stt',
+      render: (text, record, index) => index + 1,
     },
     {
       title: 'Bộ môn',
@@ -88,22 +103,64 @@ const TrainingContainer = () => {
       dataIndex: 'totalPoint',
       key: 'totalPoint',
       render: (text, record) => (
-        <button onClick={() => showModal(record)}>
+        <Button onClick={() => showDetail(record)}>
           {"Chi tiết"}
-        </button>
+        </Button>
+       ),
+    },
+    {
+      title: 'Đồng ý',
+      dataIndex: 'totalPoint',
+      key: 'totalPoint',
+      render: (text, record) => (
+        {...record.planStatus == 0 ? 
+          <Button type='primary' {...record.planStatus != 0 ? 'disabled' : ''} onClick={() => reject(record)}>
+            {"Đồng ý"}
+          </Button>
+          : null}
+       ),
+    },
+    {
+      title: 'Từ chối',
+      dataIndex: 'totalPoint',
+      key: 'totalPoint',
+      render: (text, record) => (
+        {...record.planStatus == 0 ? 
+        <Button danger {...record.planStatus != 0 ? 'disabled' : ''} onClick={() => reject(record)}>
+          {"Từ chối"}
+        </Button>
+        : null}
        ),
     },
   ];
 
+  const approved = async (record) => {
+    const {data} = await apiClient.post(`/api/approve-observation-plan?planId=${record.id}&statusId=1`);
+    if(data.status == 200){
+      openNotificationWithIcon("success", "Duyệt thành công")
+      _requestData();
+    } else {
+      openNotificationWithIcon("error", "Thất bại")
+    }
+  }
+  const reject = async (record) => {
+    const {data} = await apiClient.post(`/api/approve-observation-plan?planId=${record.id}&statusId=2`);
+    if(data.status == 200){
+      openNotificationWithIcon("success", "Từ chối thành công")
+      _requestData();
+    } else {
+      openNotificationWithIcon("error", "Thất bại")
+    }
+  }
   const semesterColums = [
     {
       title: 'Kì học',
       dataIndex: 'totalPoint',
       key: 'totalPoint',
       render: (text, record) => (
-        <button onClick={() => setSemesterId(record.value)} className='is-clickable' >
-          {record.name}
-        </button>
+        <Button style={{width : 130}} onClick={() => setSemesterId(record.value)} className='is-clickable' >
+        {record.name}
+      </Button>
        ),
     },
   ]
@@ -123,6 +180,15 @@ const TrainingContainer = () => {
           footer={null}
           >
           <TrainingChangeContainer data={listData} />
+        </Modal>
+        <Modal
+          open={openDetail}
+          title="Chi tiết"
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={null}
+          >
+          {detail && <TrainingDetail data={detail} />}
         </Modal>
         <div className='columns'>
           <div className='column ml-4 is-1 mr-6'>

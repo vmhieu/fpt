@@ -1,4 +1,4 @@
-import { Modal, Table } from 'antd';
+import { Modal, Table, Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../request-api/api_client';
@@ -99,9 +99,9 @@ const LectureContainer = () => {
       dataIndex: 'totalPoint',
       key: 'totalPoint',
       render: (text, record) => (
-        <button onClick={() => showModal(record)}>
+        <Button onClick={() => showModal(record)}>
           {"Chi tiết"}
-        </button>
+        </Button>
        ),
     },
   ];
@@ -112,9 +112,9 @@ const LectureContainer = () => {
       dataIndex: 'totalPoint',
       key: 'totalPoint',
       render: (text, record) => (
-        <button onClick={() => setSemesterId(record.value)} className='is-clickable' >
+        <Button style={{width : 130}} onClick={() => setSemesterId(record.value)} className='is-clickable' >
           {record.name}
-        </button>
+        </Button>
        ),
     },
   ]

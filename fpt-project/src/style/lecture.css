@@ -7,3 +7,8 @@
 .text-area-antd{
   max-width: 500% !important;
 }
+
+.ant-modal-content{
+  width: 250%;
+  margin-left: -15rem;
+}

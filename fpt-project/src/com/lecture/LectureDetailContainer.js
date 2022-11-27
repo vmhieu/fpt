@@ -1,4 +1,4 @@
-import { Button, Form, Input, Table } from 'antd';
+import { Button, Form, Input, Table, InputNumber } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React, { useEffect, useState } from 'react';
 import { apiClient } from '../../request-api/api_client';
@@ -16,6 +16,8 @@ const LectureDetailContainer = (props) => {
 
   const _requestData = async () => {
     const {data} = await apiClient.get(`/api/training/list-criteria-campus?id=${campusId}`)
+    console.log("data" , data);
+    
     setListData(data.items);
   }
 
@@ -41,7 +43,7 @@ const LectureDetailContainer = (props) => {
     {
       title: 'Nhập điểm',
       render: (text, record, index) =>
-          <Input type="number" onChange={(e) => onPointChange(record, e, index)}/>
+          <InputNumber min={1} max={4} style={{width : 200}} onChange={(e) => onPointChange(record, e, index)}/>
     },
   ]
   
@@ -122,7 +124,8 @@ const LectureDetailContainer = (props) => {
                   },
                 ]}
               >
-              <Input placeholder='Tên bài giảng' style={{width: "400%"}}/>
+              <Input placeholder='Tên bài giảng'/>
+              
             </Form.Item>
 
           {listData?.length > 0 && <Table columns={columns} dataSource={listData} pagination={false}/>}
@@ -136,7 +139,7 @@ const LectureDetailContainer = (props) => {
               },
             ]}
           >
-            <TextArea rows={4} style={{width: "290%"}} className="text-area-antd"/>
+            <TextArea rows={4} className="text-area-antd"/>
           </Form.Item>
           <h1 className='pt-4'>Nhược điểm</h1>
           <Form.Item
@@ -148,7 +151,7 @@ const LectureDetailContainer = (props) => {
               },
             ]}
           >
-            <TextArea rows={4} style={{width: "290%"}} className="text-area-antd"/>
+            <TextArea rows={4} className="text-area-antd"/>
           </Form.Item>
           <h1 className='pt-4'>Đánh giá chung</h1>
           <Form.Item
@@ -160,7 +163,7 @@ const LectureDetailContainer = (props) => {
               },
             ]}
           >
-            <TextArea rows={4} style={{width: "290%"}} className="text-area-antd"/>
+            <TextArea rows={4} className="text-area-antd"/>
           </Form.Item>
           <div className='is-flex is-justify-content-end'>
             <Form.Item >

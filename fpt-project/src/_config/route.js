@@ -33,7 +33,8 @@ export const public_route = [
     {
         path : `/${ROUTES.ADMIN}`,
         Com : AdminScreen,
-        role : [1]
+        // role : [1]
+        role : [1 ,2 ,3]
     },
     {
         path: `/404`,
@@ -43,27 +44,32 @@ export const public_route = [
     {
         path: `/${ROUTES.HEADOFSECTIONPLAN}`,
         Com: PlanContainer,
-        role : [2]
+        // role : [2]
+        role : [1 ,2 ,3]
     },
     {
         path: `/${ROUTES.PLAN_DETAIL}`,
         Com: PlanDetailContainer,
-        role : [2]
+        // role : [2]
+        role : [1 ,2 ,3]
     },
     {
         path: `/${ROUTES.LECTURE}`,
         Com: LectureContainer,
-        role : [3]
+        // role : [3]
+        role : [1 ,2 ,3]
     },
     {
         path: `/${ROUTES.LECTURE_DETAIL}`,
         Com: LectureDetailContainer,
-        role : [3]
+        // role : [3]
+        role : [1 ,2 ,3]
     },
     {
         path: `/${ROUTES.TRAINING}`,
         Com: TrainingContainer,
-        role : [3]
+        // role : [3]
+        role : [1 ,2 ,3]
     }
 
 ];

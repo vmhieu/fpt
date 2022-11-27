@@ -82,7 +82,7 @@ const AdminLecture = () => {
     const _requestDataTable = async () => {
         const start = page.current == 1 ? 0 : page.current*page.number_of_page - page.number_of_page
         const end = page.current*page.number_of_page
-        const  {data}  = await apiClient.get(`/api/admin/list-account-role?roleId=2&start=${start}&end=${end}`)
+        const  {data}  = await apiClient.get(`/api/admin/list-account-role?roleId=3&start=${start}&end=${end}`)
         const convertData = data.items.map(item => {
             return {
                 key: item.id,

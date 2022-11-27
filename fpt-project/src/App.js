@@ -21,7 +21,7 @@ function App() {
                 <>
                   {!checkRole
                     ?
-                    <Route path={"/login"} element={
+                    <Route key="/login" path={"/login"} element={
                       <Login />
                     }>
                     </Route> :

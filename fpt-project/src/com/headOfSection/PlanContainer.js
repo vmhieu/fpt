@@ -30,6 +30,8 @@ const PlanContainer = () => {
 
   const getSemesters = async () => {
     const {data} = await apiClient.get('/api/semester-list')
+    console.log("aaaaa" ,data);
+    
     setListSemesters(data);
   }
   
@@ -105,9 +107,9 @@ const PlanContainer = () => {
       key: 'result',
       dataIndex: 'result',
       render: (text, record) => (
-       <button onClick={() => handleNavigation(record)}>
+       <Button onClick={() => handleNavigation(record)}>
          {"Kết quả"}
-       </button>
+       </Button>
       ),
     },
     
@@ -118,9 +120,9 @@ const PlanContainer = () => {
       dataIndex: 'totalPoint',
       key: 'totalPoint',
       render: (text, record) => (
-        <button onClick={() => setSemesterId(record.value)} className='is-clickable' >
+        <Button style={{width : 130}} onClick={() => setSemesterId(record.value)} className='is-clickable' >
           {record.name}
-        </button>
+        </Button>
        ),
     },
   ]

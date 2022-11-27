@@ -1,13 +1,10 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import {AutoComplete, Button, DatePicker, Form, Input, Select, Space } from 'antd';
+import { AutoComplete, Button, DatePicker, Form, Input, Select, Space } from 'antd';
 import '../../style/plan.css';
 
-import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import Header from '../Header';
+import React, { useEffect, useState } from 'react';
 import { apiClient } from '../../request-api/api_client';
-import { Autocomplete, TextField } from '@mui/material';
-const { Option } = Select;
 
 const ModalPlanContainer = () => {
   const [form] = Form.useForm();
@@ -93,6 +90,7 @@ const ModalPlanContainer = () => {
   };
 
   const onFinish = (fieldValues) => {
+    console.log("aaaaaaaa", fieldValues);
     var observationSlotsRequest = fieldValues.observationSlotsRequest;
     observationSlotsRequest = observationSlotsRequest.map((item) => {
       var date = new Date(item.slotTime._d),
@@ -162,6 +160,7 @@ const ModalPlanContainer = () => {
     const list = [...array];
     list[index] = value;
     setArray(list);
+    setOptions([])
   };
   
   return (
@@ -229,7 +228,7 @@ const ModalPlanContainer = () => {
                               validator(rule, value) {
                                 if (array.filter(item => item == value).length > 1) {
                                   return Promise.reject("Không được trùng");
-                                } 
+                                }  else return Promise.resolve()
                               }
                             })
                           ]}
@@ -378,7 +377,7 @@ const ModalPlanContainer = () => {
                               validator(rule, value) {
                                 if (array.filter(item => item == value).length > 1) {
                                   return Promise.reject("Không được trùng");
-                                } 
+                                } else return Promise.resolve()
                               }
                             })
                           ]}
@@ -417,7 +416,7 @@ const ModalPlanContainer = () => {
                               validator(rule, value) {
                                 if (array.filter(item => item == value).length > 1) {
                                   return Promise.reject("Không được trùng");
-                                } 
+                                } else return Promise.resolve()
                               }
                             })
                           ]}
@@ -472,7 +471,7 @@ const ModalPlanContainer = () => {
                               validator(rule, value) {
                                 if (array.filter(item => item == value).length > 1) {
                                   return Promise.reject("Không được trùng");
-                                } 
+                                } else return Promise.resolve()
                               }
                             })
                           ]}
@@ -511,7 +510,7 @@ const ModalPlanContainer = () => {
         )}
       </Form.List>
       <Form.Item className='button-submit'>
-        <Button type="primary" htmlType="submit" style={{width: "100%"}}>
+        <Button type="primary" htmlType="submit" style={{width: "100%"}} >
           Submit
         </Button>
       </Form.Item>

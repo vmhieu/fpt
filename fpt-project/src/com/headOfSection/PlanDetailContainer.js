@@ -17,7 +17,7 @@ const PlanDetailContainer = () => {
   useEffect(() => {
     _requestData();
   }, [])
-
+  console.log("sdadsa: ", listData);
   const columns = [
     {
       title: 'STT',
@@ -55,7 +55,9 @@ const PlanDetailContainer = () => {
   return (
     <div>
       <Header />
-      {listData?.length > 0 && <Table columns={columns} dataSource={listData} />}
+      {listData?.length == 0 ? <div className='mt-6 has-text-centered is-size-1'>Hiện chưa có dữ liệu</div> 
+      :
+      <Table columns={columns} dataSource={listData} />}
       {listData?.length > 0 && <div className='columns '>
         <div className='column is-1' style={{marginLeft: "40rem"}}>
             <button className='button is-danger'>

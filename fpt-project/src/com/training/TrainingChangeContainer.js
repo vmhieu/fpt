@@ -24,22 +24,26 @@ const TrainingChangeContainer = (props) => {
   }
 
   const handlePostCreate = async () => {
-    const values = {"campusId": campusId, "criteriaName": create}
-    const {data} = await apiClient.post(`/api/training/create-criteria`, values);
-    if(data.status == 200){
-      openNotificationWithIcon("success", "Thêm mới thành công")
-      setOpen(false)
-      _requestData();
+    if(create == ''){
+      openNotificationWithIcon("error", "Không được bỏ trống")
+    } else {
+      
+      const values = {"campusId": campusId, "criteriaName": create}
+      const {data} = await apiClient.post(`/api/training/create-criteria`, values);
+      if(data.status == 200){
+        openNotificationWithIcon("success", "Thêm mới thành công")
+        setOpen(false)
+        _requestData();
     } else {
       openNotificationWithIcon("error", "Thất bại")
     }
+  }
   }
 
   const _requestData = async () => {
     const {data} = await apiClient.get(`/api/training/list-criteria-campus?id=${campusId}`)
     
     setListData(data.items);
-    console.log("convert: ", data.items);
   }
 
   useEffect(() => {
@@ -85,7 +89,7 @@ const TrainingChangeContainer = (props) => {
       </div>
       <Drawer title="Thêm mới" placement="right" onClose={onClose} open={open}>
           <p>Nội dung tiêu chí</p>
-          <TextArea rows={4} onChange={(e) => onCreateChange(e)} />
+          <TextArea rows={4} defaultValue={''} onChange={(e) => onCreateChange(e)} />
           <button className='button is-primary mt-5' onClick={(e) => handlePostCreate()}>Xác nhận</button>
       </Drawer>
       <hr />

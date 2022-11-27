@@ -41,7 +41,7 @@ const LectureDetailContainer = (props) => {
     {
       title: 'Nhập điểm',
       render: (text, record, index) =>
-          <Input type="number" onChange={(e) => onPointChange(record, e, index)}/>
+          <Input type="number" max={4} min={1} onChange={(e) => onPointChange(record, e, index)}/>
     },
   ]
   

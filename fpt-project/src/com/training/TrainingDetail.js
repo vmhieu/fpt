@@ -1,13 +1,13 @@
 import { Table } from 'antd';
 import React, { useEffect, useState } from 'react';
+import '../../style/train.css'
 import { apiClient } from '../../request-api/api_client';
 
 const TrainingDetail = (props) => {
 
-  const {record} = props;
+  const {data} = props;
   const [listData, setListData] = useState();
-  var planId = record ? record.id : '';
-  console.log("plannnnnnnnId: ", record);
+  var planId = data ? data.id : '';
 
   const _requestData = async () => {
     const {data} = await apiClient.get(`/api/list-observation-slot-plan?planId=${planId}`)
@@ -82,7 +82,7 @@ const TrainingDetail = (props) => {
    
   ];
   return (
-    <div>
+    <div >
       {listData?.length > 0 && <Table columns={columns} dataSource={listData} />}
     </div>
   );

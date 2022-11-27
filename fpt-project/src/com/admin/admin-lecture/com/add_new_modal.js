@@ -65,7 +65,7 @@ const ModalForm = ({
       <TitleDetail _onClose={_onClose} _onReset={() => form.resetFields()} />
       <StyledForm onFinish={onFinish} form={form} initialValues={dataInit}
         style={{ padding: '0px 10px' }} layout="vertical" >
-        <Form.Item> <HeaderForm loading={loading} type={type} /> </Form.Item>
+        <Form.Item style={{width : "100%"}}> <HeaderForm loading={loading} type={type} /> </Form.Item>
         <RenderForm jsonFrom={jsonFormInput} type={type} form={form} />
       </StyledForm>
     </Drawer>
@@ -85,7 +85,7 @@ const TitleDetail = React.memo(({ _onReset, _onClose }) => {
 
 const HeaderForm = ({ loading, type, _onClose = () => { } }) => {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', }}>
+    <div style={{width : '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', }}>
       <span style={{ fontSize: 18, fontWeight: '500' }}>{type === "EDIT" ? "Chỉnh sửa" : "Thêm mới"}</span>
       <div>
         <Button

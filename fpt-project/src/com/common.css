@@ -31,3 +31,9 @@
     color: black;
     display: flex;
 }
+
+.ant-form-item-row{
+    width: 100% !important;
+    margin-right: 0px !important;
+
+}

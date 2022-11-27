@@ -21,13 +21,13 @@ export const ROUTES = {
 
 export const public_route = [
     {
-        path: `/${ROUTES.HOME}`,
-        Com: Home,
+        path: `/${ROUTES.LOGIN}`,
+        Com: Login,
         role : [1 ,2 ,3]
     },
     {
-        path: `/${ROUTES.LOGIN}`,
-        Com: Login,
+        path: `/${ROUTES.HOME}`,
+        Com: Home,
         role : [1 ,2 ,3]
     },
     {

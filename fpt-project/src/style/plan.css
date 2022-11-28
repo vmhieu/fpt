@@ -24,7 +24,7 @@
   padding-bottom: 0 !important;
   text-align: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .button-add{
@@ -39,7 +39,8 @@
   margin-left: 3rem;
 }
 .button-remove{
-  margin-left: -3rem;
+  margin-left: 0.5rem;
+  margin-top: 8px;
 }
 .ant-form-item{
   padding-right: 4rem;

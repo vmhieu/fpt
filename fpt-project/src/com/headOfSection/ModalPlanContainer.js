@@ -212,16 +212,21 @@ const ModalPlanContainer = ({handleCancel}) => {
         {(fields, { add, remove }) => (
           <>
             {fields.map((field, index) => (
-              <div className='form-detail' key={index}>
+              <div className='form-detail pl-4' key={index}>
               <Space key={field.key} align="start">
                 <div className='form-slot'>
-                  <div className='form-util'>
+                  <div className='columns mt-4 '>
+
+                  <div className='column is-flex is-justify-content-end'>
+
                     <Form.Item
                       shouldUpdate={(prevValues, curValues) =>
                         prevValues.area !== curValues.area || prevValues.sights !== curValues.sights
                       }
                     >
                       {() => (
+
+
                         <Form.Item
                           {...field}
                           label="AccountId"
@@ -252,9 +257,13 @@ const ModalPlanContainer = ({handleCancel}) => {
                             />
                           {/* <Select className='select-box' options={accounts} onChange={handleChange} /> */}
                         </Form.Item>
+
+
                       )}
                     </Form.Item>
-
+                    </div>
+                    
+                    <div className='column is-flex is-justify-content-end'>
                     <Form.Item
                       shouldUpdate={(prevValues, curValues) =>
                         prevValues.area !== curValues.area || prevValues.sights !== curValues.sights
@@ -287,11 +296,13 @@ const ModalPlanContainer = ({handleCancel}) => {
                         </Form.Item>
                       )}
                     </Form.Item>
+                    </div>
                  </div>
 
                   
 
-                  <div className='form-util'>
+                  <div className='columns'>
+                    <div className='column is-flex is-justify-content-end'>
                     <Form.Item
                       shouldUpdate={(prevValues, curValues) =>
                         prevValues.area !== curValues.area || prevValues.sights !== curValues.sights
@@ -313,7 +324,8 @@ const ModalPlanContainer = ({handleCancel}) => {
                         </Form.Item>
                       )}
                     </Form.Item>
-
+                    </div>
+                    <div className='column is-flex is-justify-content-end'>
                     <Form.Item
                     {...field}
                     label="slotTime"
@@ -325,15 +337,17 @@ const ModalPlanContainer = ({handleCancel}) => {
                       },
                     ]}
                   >
-                    <DatePicker disabledDate={(current) => {
+                    <DatePicker style={{width: "13rem"}} disabledDate={(current) => {
                       return moment().add(-1, 'days')  >= current 
                       }}/>
                   </Form.Item> 
-                    
+                    </div>
                  </div>
 
 
-                  <div className='form-util'>
+                  <div className='columns'>
+                  <div className='column is-flex is-justify-content-end'>
+
                     <Form.Item
                       {...field}
                       label="RoomId"
@@ -348,6 +362,8 @@ const ModalPlanContainer = ({handleCancel}) => {
                           <Select className='select-box' options={roomOptions} onChange={handleChange} />
 
                     </Form.Item>
+                    </div>
+                    <div className='column is-flex is-justify-content-end'>
                     <Form.Item
                       {...field}
                       label="Class Name"
@@ -359,12 +375,14 @@ const ModalPlanContainer = ({handleCancel}) => {
                         },
                       ]}
                     >
-                      <Input />
+                      <Input style={{width: "13rem"}}/>
                     </Form.Item>
+                    </div>
                   </div>
 
 
-                  <div className='form-util'>
+                  <div className='columns pt-4'>
+                  <div className='column is-flex is-justify-content-end'>
                     <Form.Item
                       shouldUpdate={(prevValues, curValues) =>
                         prevValues.area !== curValues.area || prevValues.sights !== curValues.sights
@@ -403,6 +421,8 @@ const ModalPlanContainer = ({handleCancel}) => {
                         </Form.Item>
                       )}
                     </Form.Item>
+                    </div>
+                    <div className='column is-flex is-justify-content-end'>
 
                     <Form.Item
                       shouldUpdate={(prevValues, curValues) =>
@@ -442,9 +462,10 @@ const ModalPlanContainer = ({handleCancel}) => {
                         </Form.Item>
                       )}
                     </Form.Item>
+                    </div>
                  </div>
                   
-                  <div className='form-util'>
+                  <div className=''>
                     <Form.Item
                         {...field}
                         label="Reason"

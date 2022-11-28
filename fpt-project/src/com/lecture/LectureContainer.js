@@ -12,7 +12,7 @@ const LectureContainer = () => {
   const [semesterId, setSemesterId] = useState(1);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [detail, setDetail] = useState();
+  const [detail, setDetail] = useState({});
   const campusId = localStorage.getItem('campusId');
   const userId = localStorage.getItem('userId');
   const navigation = useNavigate();
@@ -133,7 +133,7 @@ const LectureContainer = () => {
         onClose={handleCancel}
         footer={null}
       >
-        <LectureDetailContainer data={detail} onCancel={handleCancel} />
+        {detail.id && <LectureDetailContainer record={detail} onCancel={handleCancel} />}
       </Drawer>
       <div className='columns'>
         <div className='column ml-4 is-1 mr-6'>

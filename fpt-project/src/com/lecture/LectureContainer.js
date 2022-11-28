@@ -1,4 +1,4 @@
-import { Modal, Table, Button } from 'antd';
+import { Modal, Table, Button, Drawer } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../request-api/api_client';
@@ -17,21 +17,21 @@ const LectureContainer = () => {
   const userId = localStorage.getItem('userId');
   const navigation = useNavigate();
   const _requestData = async () => {
-    const {data} = await apiClient.get(`/api/lecture/list-observation-review?campusId=${campusId}&semesterId=${semesterId}&accountId=${userId}`)
+    const { data } = await apiClient.get(`/api/lecture/list-observation-review?campusId=${campusId}&semesterId=${semesterId}&accountId=${userId}`)
     data.items = data.items.map((item, idx) => {
       var date = new Date(`${item.slotTime}`);
-        item.slotTime =
+      item.slotTime =
         ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear();
-        return item;
+      return item;
     })
     setListData(data.items);
   }
 
   const getSemesters = async () => {
-    const {data} = await apiClient.get('/api/semester-list')
+    const { data } = await apiClient.get('/api/semester-list')
     setListSemesters(data);
   }
-  
+
   useEffect(() => {
     getSemesters()
   }, [])
@@ -102,7 +102,7 @@ const LectureContainer = () => {
         <Button onClick={() => showModal(record)}>
           {"Chi tiết"}
         </Button>
-       ),
+      ),
     },
   ];
 
@@ -112,35 +112,38 @@ const LectureContainer = () => {
       dataIndex: 'totalPoint',
       key: 'totalPoint',
       render: (text, record) => (
-        <Button style={{width : 130}} onClick={() => setSemesterId(record.value)} className='is-clickable' >
+        <Button style={{ width: 130 }} onClick={() => setSemesterId(record.value)} className='is-clickable' >
           {record.name}
         </Button>
-       ),
+      ),
     },
   ]
 
   return (
     <div>
-        <Header />
-        <p className='has-text-centered has-text-weight-bold is-size-3'>Danh sách đi dự giờ của giảng viên</p>
-        <Modal
-          open={open}
-          title="Chi tiết"
-          onOk={handleOk}
-          onCancel={handleCancel}
-          footer={null}
-          >
-          <LectureDetailContainer data={detail} />
-        </Modal>
-        <div className='columns'>
-          <div className='column ml-4 is-1 mr-6'>
-              {listSemesters?.length > 0 && <Table columns={semesterColums} dataSource={listSemesters} pagination={false}/>}
+      <Header />
+      <p className='has-text-centered has-text-weight-bold is-size-3'>Danh sách đi dự giờ của giảng viên</p>
+      <Drawer
+        width={620}
+        open={open}
+        title={
+          <div className='has-text-centered has-text-weight-bold is-size-4'>Phiếu đánh giá chi tiết</div>
+        }
+        onOk={handleOk}
+        onClose={handleCancel}
+        footer={null}
+      >
+        <LectureDetailContainer data={detail} onCancel={handleCancel} />
+      </Drawer>
+      <div className='columns'>
+        <div className='column ml-4 is-1 mr-6'>
+          {listSemesters?.length > 0 && <Table columns={semesterColums} dataSource={listSemesters} pagination={false} />}
 
-          </div>
-          <div className='column'>
-              {listData?.length > 0 && <Table columns={columns} dataSource={listData} />}
-          </div>
         </div>
+        <div className='column'>
+          {listData?.length > 0 && <Table columns={columns} dataSource={listData} />}
+        </div>
+      </div>
     </div>
   );
 };

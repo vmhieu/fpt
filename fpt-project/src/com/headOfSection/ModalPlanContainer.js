@@ -5,8 +5,9 @@ import '../../style/plan.css';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { apiClient } from '../../request-api/api_client';
+import { openNotificationWithIcon } from '../../request/notification';
 
-const ModalPlanContainer = () => {
+const ModalPlanContainer = ({handleCancel}) => {
   const [form] = Form.useForm();
   const campusId = localStorage.getItem('campusId');
   const userId = localStorage.getItem('userId');
@@ -115,8 +116,14 @@ const ModalPlanContainer = () => {
     })
   };
 
-  const postPlan = (values) => {
-    apiClient.post(`/api/create-observation-plan`, values)
+  const postPlan = async (values) => {
+    const {data} = await apiClient.post(`/api/create-observation-plan`, values)
+    if(data.status == 200){
+      openNotificationWithIcon("success", "Tạo mới thành công")
+      handleCancel()
+  } else {
+    openNotificationWithIcon("error", "Thất bại")
+  }
   }
   const handleChange = () => {
     form.setFieldsValue({
@@ -457,38 +464,6 @@ const ModalPlanContainer = () => {
                         prevValues.area !== curValues.area || prevValues.sights !== curValues.sights
                       }
                       >
-                      {() => (
-                        <Form.Item
-                        {...field}
-                        label="headTraining"
-                        name={[field.name , 'headTraining']}
-                        rules={[
-                          {
-                              required: true,
-                              message: 'Missing headTraining',
-                            },
-                            ({ getFieldValue }) => ({
-                              validator(rule, value) {
-                                if (array.filter(item => item == value).length > 1) {
-                                  return Promise.reject("Không được trùng");
-                                } else return Promise.resolve()
-                              }
-                            })
-                          ]}
-                          >
-                            <AutoComplete
-                              options={options}
-                              style={{
-                                width: 200,
-                              }}
-                              onSelect={(value) => onSelect(value, 3)}
-                              onSearch={onAccountSearch}
-                              onChange={handleChange}
-                              placeholder="input here"
-                            />
-                          {/* <Select className='select-box' options={accounts} onChange={handleChange} /> */}
-                        </Form.Item>
-                      )}
                     </Form.Item>
                     </div>
               </div>

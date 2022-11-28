@@ -1,4 +1,4 @@
-import { Button, Modal, Table } from 'antd';
+import { Button, Modal, Table, Drawer } from 'antd';
 import React, { useEffect, useState } from 'react';
 import ModalPlanContainer from './ModalPlanContainer';
 import '../../style/plan.css';
@@ -16,6 +16,8 @@ const PlanContainer = () => {
   const [listSemesters, setListSemesters] = useState();
   const [semesterId, setSemesterId] = useState(1);
   const userId = localStorage.getItem('userId');
+  const [count, setCount] = useState(1);
+  const [isDone, setIsDone] = useState(false);
 
   const _requestData = async () => {
     const {data} = await apiClient.get(`/api/list-observation-slot?semesterId=${semesterId}&accountId=${userId}`)
@@ -36,12 +38,16 @@ const PlanContainer = () => {
   }
   
   useEffect(() => {
-    getSemesters()
+    getSemesters();
+    setIsDone(true)
   }, [])
   
   useEffect(() => {
-    _requestData();
-  }, [semesterId])
+    if(isDone){
+      _requestData();
+      setCount(semesterId)
+    }
+  }, [semesterId, isDone])
 
   const showModal = () => {
     setOpen(true);
@@ -136,18 +142,23 @@ const PlanContainer = () => {
     <Header />
     <div className='plan-container'>
       <div className='modal-plan'>
-        <Button type="primary" onClick={showModal}>
+        <Button type="primary"  disabled={count != 1 ? true : false} onClick={showModal}>
           Tạo kế hoạch dự giờ
         </Button>
-        <Modal
+        <Drawer
+          width={820}
           open={open}
-          title="Tạo kế hoạch dự giờ"
+          title={
+            <div className='has-text-weight-bold is-size-4'>
+              Tạo kế hoạch dự giờ
+            </div>
+          }
           onOk={handleOk}
-          onCancel={handleCancel}
+          onClose={handleCancel}
           footer={null}
           >
-          <ModalPlanContainer />
-        </Modal>
+          <ModalPlanContainer handleCancel={handleCancel}/>
+        </Drawer>
       </div>
       <div className='columns'>
           <div className='column ml-4 is-1 mr-6'>

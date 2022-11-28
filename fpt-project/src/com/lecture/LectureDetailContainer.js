@@ -1,23 +1,27 @@
-import { Button, Form, Input, Table, InputNumber } from 'antd';
+import { Button, Form, Input, Table, InputNumber, Modal } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React, { useEffect, useState } from 'react';
 import { apiClient } from '../../request-api/api_client';
 import '../../style/lecture.css'
 import Header from '../Header';
+import { openNotificationWithIcon } from '../../request/notification';
 
 const LectureDetailContainer = (props) => {
-  const {data} = props;
+  const { data ,onCancel} = props;
   const [form] = Form.useForm();
   const campusId = localStorage.getItem('campusId');
   const userId = localStorage.getItem('userId');
   const [listData, setListData] = useState();
-  const [values, setValues] = useState({"observationSlotId": data.id, "accountId": parseInt(userId)});
+  const [index, setIndex] = useState(0);
+  const [values, setValues] = useState({ "observationSlotId": data.id, "accountId": parseInt(userId) });
   const [observation, setObservation] = useState([]);
 
+  const { confirm } = Modal;
+
   const _requestData = async () => {
-    const {data} = await apiClient.get(`/api/training/list-criteria-campus?id=${campusId}`)
-    console.log("data" , data);
-    
+    const { data } = await apiClient.get(`/api/training/list-criteria-campus?id=${campusId}`)
+    console.log("data", data);
+
     setListData(data.items);
   }
 
@@ -43,13 +47,13 @@ const LectureDetailContainer = (props) => {
     {
       title: 'Nhập điểm',
       render: (text, record, index) =>
-          <InputNumber min={1} max={4} style={{width : 200}} onChange={(e) => onPointChange(record, e, index)}/>
+        <Input type="number" max={4} min={1} onChange={(e) => onPointChange(record, e, index)} />
     },
   ]
-  
+
 
   const onPointChange = (values, e, index) => {
-    const record = {"code": values.criteriaCode, "name": values.criteriaName, "point": parseInt(e.target.value)}
+    const record = { "code": values.criteriaCode, "name": values.criteriaName, "point": parseInt(e.target.value) }
     var data = [...observation];
     data[index] = record;
     setObservation(data);
@@ -59,16 +63,37 @@ const LectureDetailContainer = (props) => {
   const handleSubmit = () => {
     console.log("valuess:", values);
   }
-  const onFinish = (fieldValues) => {
-    const data = {...fieldValues, ...values, "observationDetailRequests": observation};
-    console.log("dataaaaaaaa:", data);
-    apiClient.post(`/api/lecture/create-observation-review`, data)
+
+  function showConfirm(fieldValues) {
+    confirm({
+      title: 'Bạn đã chắc chắn nộp chưa?',
+      content:
+        'Khi nhấp vào nút OK, hộp thoại này sẽ đóng sau 1 giây',
+      async onOk() {
+        try {
+          const body = { ...fieldValues, ...values, "observationDetailRequests": observation };
+          const { data } = await apiClient.post(`/api/lecture/create-observation-review`, body)
+          if (data.status == '200') {
+            openNotificationWithIcon("success","Thêm thanh công")
+            setIndex(index + 1)
+            onCancel()
+            form.resetFields();
+          }
+        } catch (e) {
+          openNotificationWithIcon("error","Nộp thất bại")
+        }
+      },
+      onCancel() { },
+    });
+  }
+
+  const onFinish = async (fieldValues) => {
+    showConfirm(fieldValues)
   };
   return (
     <div>
-    <Form form={form} name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
-      <p className='has-text-centered has-text-weight-bold is-size-4'>Phiếu đánh giá chi tiết</p>
-      {data && <div>
+      <Form form={form} name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
+        {data && <div>
           <div className='columns'>
             <div className='column is-8'>
               <div className='columns'>
@@ -83,7 +108,7 @@ const LectureDetailContainer = (props) => {
               </div>
             </div>
             <div className='column'>
-            <div className='columns'>
+              <div className='columns'>
                 <div className='column'>
                   <p>Ca học:</p>
                   <p>Lớp học:</p>
@@ -96,8 +121,8 @@ const LectureDetailContainer = (props) => {
             </div>
           </div>
           <div className='columns'>
-              <p className='column is-4'>Tên giảng viên được đánh giá:</p>
-              <p className='column'>{data.lectureName}</p>
+            <p className='column is-4'>Tên giảng viên được đánh giá:</p>
+            <p className='column'>{data.lectureName}</p>
           </div>
           <div className='columns'>
             <div className='column'>
@@ -107,28 +132,28 @@ const LectureDetailContainer = (props) => {
               </div>
             </div>
             <div className='column'>
-            <div className='columns'>
+              <div className='columns'>
                 <div className='column is-3'>Bộ môn:</div>
                 <div className='column'>{data.departmentName}</div>
               </div>
             </div>
           </div>
 
-            <Form.Item
-                label="Tên bài giảng"
-                name="lessonName"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Missing lecture name',
-                  },
-                ]}
-              >
-              <Input placeholder='Tên bài giảng'/>
-              
-            </Form.Item>
+          <Form.Item
+            label="Tên bài giảng"
+            name="lessonName"
+            rules={[
+              {
+                required: true,
+                message: 'Missing lecture name',
+              },
+            ]}
+          >
+            <Input placeholder='Tên bài giảng' />
 
-          {listData?.length > 0 && <Table columns={columns} dataSource={listData} pagination={false}/>}
+          </Form.Item>
+
+          {listData?.length > 0 && <Table key={index} columns={columns} dataSource={listData} pagination={false} />}
           <h1 className='pt-4'>Ưu điểm</h1>
           <Form.Item
             name="advantage"
@@ -139,7 +164,7 @@ const LectureDetailContainer = (props) => {
               },
             ]}
           >
-            <TextArea rows={4} className="text-area-antd"/>
+            <TextArea rows={4} className="text-area-antd" />
           </Form.Item>
           <h1 className='pt-4'>Nhược điểm</h1>
           <Form.Item
@@ -151,7 +176,7 @@ const LectureDetailContainer = (props) => {
               },
             ]}
           >
-            <TextArea rows={4} className="text-area-antd"/>
+            <TextArea rows={4} className="text-area-antd" />
           </Form.Item>
           <h1 className='pt-4'>Đánh giá chung</h1>
           <Form.Item
@@ -163,7 +188,7 @@ const LectureDetailContainer = (props) => {
               },
             ]}
           >
-            <TextArea rows={4} className="text-area-antd"/>
+            <TextArea rows={4} className="text-area-antd" />
           </Form.Item>
           <div className='is-flex is-justify-content-end'>
             <Form.Item >
@@ -173,7 +198,7 @@ const LectureDetailContainer = (props) => {
             </Form.Item>
           </div>
         </div>}
-    </Form>
+      </Form>
 
     </div>
   );

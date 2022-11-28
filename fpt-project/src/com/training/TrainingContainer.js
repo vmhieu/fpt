@@ -52,12 +52,11 @@ const TrainingContainer = () => {
     setOpen(true);
   };
   const showDetail = (record) => {
+    setOpenDetail(true)
     setDetail(record);
   };
 
-  useEffect(() => {
-    setOpenDetail(true);
-  }, [detail.id])
+  
   console.log("detail: ", detail);
   const handleOk = () => {
     setLoading(true);
@@ -181,14 +180,14 @@ const TrainingContainer = () => {
           >
           <TrainingChangeContainer data={listData} />
         </Modal>
-        <Modal
+        <Modal className='train-detail'
           open={openDetail}
           title="Chi tiết"
           onOk={handleOk}
           onCancel={handleCancel}
           footer={null}
           >
-          {detail && <TrainingDetail data={detail} />}
+          {detail.id != 0 && <TrainingDetail data={detail} />}
         </Modal>
         <div className='columns'>
           <div className='column ml-4 is-1 mr-6'>

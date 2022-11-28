@@ -6,6 +6,7 @@ import PlanDetailContainer from "../com/headOfSection/PlanDetailContainer";
 import LectureContainer from "../com/lecture/LectureContainer";
 import LectureDetailContainer from "../com/lecture/LectureDetailContainer";
 import TrainingContainer from "../com/training/TrainingContainer";
+import AssessmentPlan from "../com/headOfSection/AssessmentPlan";
 
 export const ROUTES = {
     HOME : '',
@@ -49,7 +50,7 @@ export const public_route = [
     },
     {
         path: `/${ROUTES.PLAN_DETAIL}`,
-        Com: PlanDetailContainer,
+        Com: AssessmentPlan,
         // role : [2]
         role : [1 ,2 ,3]
     },

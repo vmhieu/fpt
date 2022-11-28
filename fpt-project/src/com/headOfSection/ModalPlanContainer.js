@@ -98,7 +98,7 @@ const ModalPlanContainer = ({handleCancel}) => {
       mnth = ("0" + (date.getMonth() + 1)).slice(-2),
       day = ("0" + date.getDate()).slice(-2);
       var dateResult = [date.getFullYear(), mnth, day].join("-");
-      return {...item, headSubject: userId, slotTime: dateResult}
+      return {...item, headSubject: userId, slotTime: dateResult, headTraining: 1}
     })
     var values = {
       ...fieldValues,

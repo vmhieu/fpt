@@ -1,4 +1,4 @@
-import { Modal, Table, Button } from 'antd';
+import { Modal, Table, Button, Drawer } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../request-api/api_client';
@@ -51,7 +51,11 @@ const TrainingContainer = () => {
   const showModal = (record) => {
     setOpen(true);
   };
-  const showDetail = (record) => {
+  const showDetail = async (record) => {
+    // console.log('record' ,record);
+    // const {data} = apiClient.get(`api/list-observation-slot-plan?planId=${record.id}`)
+    // console.log("aaa" ,data);
+    
     setOpenDetail(true)
     setDetail(record);
   };
@@ -180,15 +184,16 @@ const TrainingContainer = () => {
           >
           <TrainingChangeContainer data={listData} />
         </Modal>
-        <Modal className='train-detail'
+        <Drawer className='train-detail'
+          width={1100}
           open={openDetail}
-          title="Chi tiết"
+          title={<div style={{fontSize : 24 , fontWeight : 500}}>Chi tiết</div>}
           onOk={handleOk}
-          onCancel={handleCancel}
+          onClose={handleCancel}
           footer={null}
           >
           {detail.id != 0 && <TrainingDetail data={detail} />}
-        </Modal>
+        </Drawer>
         <div className='columns'>
           <div className='column ml-4 is-1 mr-6'>
               {listSemesters?.length > 0 && <Table columns={semesterColums} dataSource={listSemesters} pagination={false}/>}

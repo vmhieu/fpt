@@ -83,7 +83,7 @@ const TrainingDetail = (props) => {
   ];
   return (
     <div >
-      {listData?.length > 0 && <Table columns={columns} dataSource={listData} />}
+      {listData?.length > 0 ? <Table columns={columns} dataSource={listData} /> : <div style={{textAlign : 'center' , fontSize : 24}}>Không có bản ghi nào</div>}
     </div>
   );
 };

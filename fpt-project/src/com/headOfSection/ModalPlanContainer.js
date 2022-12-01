@@ -18,6 +18,7 @@ const ModalPlanContainer = ({handleCancel}) => {
   const [semesters, setSemesters] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [slot, setSlot] = useState([]);
+  
 
   const getDepartments = async (searchText) => {
     const {data} = await apiClient.get(`/api/list-department?id=${campusId}&name=${searchText}`)
@@ -91,7 +92,6 @@ const ModalPlanContainer = ({handleCancel}) => {
   };
 
   const onFinish = (fieldValues) => {
-    console.log("aaaaaaaa", fieldValues);
     var observationSlotsRequest = fieldValues.observationSlotsRequest;
     observationSlotsRequest = observationSlotsRequest.map((item) => {
       var date = new Date(item.slotTime._d),
@@ -112,7 +112,6 @@ const ModalPlanContainer = ({handleCancel}) => {
         "departmentId": result,
       }
       postPlan(finalValues);
-      console.log("valuesssssssssssss: ", finalValues);
     })
   };
 
@@ -121,6 +120,7 @@ const ModalPlanContainer = ({handleCancel}) => {
     if(data.status == 200){
       openNotificationWithIcon("success", "Tạo mới thành công")
       handleCancel()
+      form.resetFields()
   } else {
     openNotificationWithIcon("error", "Thất bại")
   }
@@ -140,7 +140,6 @@ const ModalPlanContainer = ({handleCancel}) => {
     if(data && data.length > 0){
       for(let i = 0; i < data.length; i++){
         searchData.push({label: data[i].name, value: data[i].value})
-
       }
     }
     setOptions(
@@ -290,6 +289,8 @@ const ModalPlanContainer = ({handleCancel}) => {
                               onSearch={onSubjectSearch}
                               onChange={handleChange}
                               placeholder="input here"
+                              onSelect={(value) => onSelect(value, 0)}
+
                             />
                           {/* <Select className='select-box' options={subjectOptions} onChange={handleChange} /> */}
                           

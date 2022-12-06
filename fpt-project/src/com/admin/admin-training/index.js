@@ -40,6 +40,11 @@ const AdminLecture = () => {
                 data : [],
                 type : 'select'
             },
+            {
+                name : 'trainingPro',
+                label : "Training Pro",
+                type : 'checkbox'
+            }
         ]
     )
     const [page , setPage] = useState({
@@ -118,10 +123,12 @@ const AdminLecture = () => {
             campusId : value.campusId,
             roles : [
                 {
-                    id : 3
+                    id : value.trainingPro ? 5 : 3
                 }
             ]
         }
+        console.log("body" , body);
+        
         try {
             const { data } = await apiClient.post('/api/admin/new-account', body)
             openNotificationWithIcon("success","Thêm thanh công")

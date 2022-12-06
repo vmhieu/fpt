@@ -27,7 +27,7 @@ const ModalPlanContainer = ({handleCancel}) => {
 
   const getSemesters = async () => {
     const {data} = await apiClient.get('/api/semester-list')
-    var rooms = data;
+    var rooms = data[data.length - 1];
     rooms = rooms.map((item, idx) => {
       return {...item, label: item.name}
     })

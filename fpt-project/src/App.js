@@ -16,21 +16,12 @@ function App() {
 
           {
             public_route.map(route => {
-              const checkRole = isLogin && route.role.filter(i => role.includes(i)).length > 0
+              // const checkRole = isLogin && route.role.filter(i => role.includes(i)).length > 0
               return (
-                <>
-                  {!checkRole
-                    ?
-                    <Route key="/login" path={"/login"} element={
-                      <Login />
-                    }>
-                    </Route> :
                     <Route key={route.path} path={route.path} element={
                       <route.Com />
                     }>
                     </Route>
-                  }
-                </>
               )
             })
           }

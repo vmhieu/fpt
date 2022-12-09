@@ -163,7 +163,7 @@ const AdminLecture = () => {
     return (
         <div style={{}}>
             <CardCustom
-                title="Table Head Of Subject"
+                title="Bảng chủ nhiệm bộ môn"
                 extra={<Extra
                     showDel={selectedRow && selectedRow[0]}
                     listColumn={[]}

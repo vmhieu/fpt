@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 
 const Admin = () => {
     const [adminIndex , setAdminIndex] = useState(1)
+    const userName = localStorage.getItem("userName")
+
 
     const objAdmin = {
         1 : <AdminLecture />,
@@ -25,22 +27,18 @@ const Admin = () => {
             <div style={{ height: 60, background: '#0a8cf1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' , marginBottom : 40 }}>
                 <div style={{ display: 'flex', width: '90', height: "80%" }}>
                     <img style={{ marginLeft: 20, marginRight: 20 }} src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/FPT_logo_2010.svg/640px-FPT_logo_2010.svg.png" height="40" />
-                    <div>
-                        <Button type="ghost" onClick={() => handleClick(1)} style={{ background: adminIndex == 1 ? 'yellow' : '#b1b7bb' }} shape="round" size='large'>
-                            Lecture
-                        </Button>
-                        <Button type="ghost" onClick={() => handleClick(2)} style={{ background: adminIndex == 2 ? 'yellow' : '#b1b7bb' ,marginLeft: 20, marginRight: 20}} shape="round" size='large'>
-                            Head Of Subject
-                        </Button>
-                        <Button type="ghost" onClick={() => handleClick(3)} style={{ background: adminIndex == 3 ? 'yellow' : '#b1b7bb' }} shape="round" size='large'>
-                            Training
-                        </Button>
+                    <div className='columns' style={{color: "white"}}>
+                        <p  style={{paddingTop: "20px", paddingLeft: "50px", width: "150px", cursor: "pointer", fontSize: "16px"}} onClick={() => handleClick(1)}>Giảng viên</p>
+                        <div style={{borderRight: "1px solid white", height: "25px", marginTop: "22px", marginRight:"20px"}}></div>
+                        <p  style={{paddingTop: "20px", width: "150px", paddingLeft: "-50px", cursor: "pointer", fontSize: "16px"}} onClick={() => handleClick(2)}>Chủ nhiệm bộ môn</p>
+                        <div style={{borderRight: "1px solid white", height: "25px", marginTop: "22px", marginRight:"20px"}}></div>
+                        <p  style={{paddingTop: "20px", width: "150px", cursor: "pointer", fontSize: "16px"}} onClick={() => handleClick(3)}>Trưởng ban đào tạo</p>
                     </div>
                 </div>
 
                 <div style={{ display: 'flex', color: 'black', fontSize: 24, fontWeight: 500 }}>
                     <div>
-                        ThangNg
+                        {userName}
                     </div>
                     <div style={{marginLeft: 20, marginRight: 20}}>
                         <UserOutlined height='60px' />

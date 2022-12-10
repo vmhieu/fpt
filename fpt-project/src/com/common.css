@@ -1,5 +1,5 @@
 .wrap-login{
-    background-image: url('https://image.shutterstock.com/image-photo/old-brick-black-color-wall-260nw-1605128917.jpg');
+    background-image: url('https://fuidentity.edunext.vn/images/BG2.png');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -37,3 +37,31 @@
     margin-right: 0px !important;
 
 }
+
+.button-google{
+    height: 40px !important;
+    border: none;
+    margin: auto;
+    margin-left: 60px;
+    box-shadow: none !important;
+}
+.choose-campus{
+    background-color: blue !important;
+    border-radius: 8px;
+    color: white;
+}
+.login-google{
+    display: flex;
+    width: 370px;
+    align-items: center;
+    margin-left: 20px;
+    border: 1px solid black;
+    border-radius: 8px;
+}
+
+.ant-select-selector{
+    background-color: blue !important;
+    border: 1px solid;
+    border-radius: 8px;
+}
+

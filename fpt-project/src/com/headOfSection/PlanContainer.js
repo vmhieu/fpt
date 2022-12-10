@@ -326,7 +326,7 @@ const PlanContainer = () => {
           <div className='column ml-4 is-1 mr-6'>
               {listSemesters?.length > 0 && <Table columns={semesterColums} dataSource={listSemesters} pagination={false}/>}
           </div>
-          <div className='column'>
+          <div className='column' style={{borderLeft: "1px solid black"}}>
               {listPlan?.length > 0 && <Table columns={columns} dataSource={listPlan} />}
           </div>
         </div>

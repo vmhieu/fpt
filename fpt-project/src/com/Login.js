@@ -72,16 +72,15 @@ const Login = () => {
         <div className="wrap-login">
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <div>
-                    <img src='https://tuyendung.fpt.com.vn/public/img/logo-ft.png' width='280' />
+                    <img src='https://img5.thuthuatphanmem.vn/uploads/2022/01/16/logo-fpt-fpt-polytechnic-tach-nen_043151201.png' width='280' />
                 </div>
                 <div className='box-login'>
                     <div style={{ color: '#252525', fontSize: 32, fontWeight: 600 }}>Login</div>
-                    <div style={{ display: 'flex', justifyContent: 'space-around' ,alignItems : 'center'}}>
-                        <div>
+                        <div style={{margin: "20px 0"}}>
                             <Select 
                                 size = 'large'
                                 showSearch
-                                placeholder="Select a campus"
+                                placeholder="Choose campus"
                                 optionFilterProp="children"
                                 onChange={onChange}
                                 onSearch={onSearch}
@@ -89,17 +88,26 @@ const Login = () => {
                                     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
                                 options={listCampus}
+                                style={{width: "370px", alignItems : 'center'}}
+                                className='choose-campus'
                             />
                         </div>
-                        <GoogleLogin
-                            clientId={process.env.REACT_APP_GOOGLE_API_ID}
-                            buttonText="Sign in with @fpt.edu.vn"
-                            onSuccess={handleLogin}
-                            onFailure={handleFailLogin}
-                            cookiePolicy={'single_host_origin'}
-                        >
-                        </GoogleLogin>
-                    </div>
+                        <div className='login-google'>
+                            <div style={{marginTop: "5px", marginLeft: "15px"}}>
+                                <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSK5q0FP74VV9wbfwP378_7kj7iDomHuKrxkXsxDdUT28V9dlVMNUe-EMzaLwaFhneeuZI&usqp=CAU' width='28' style={{alignItems : 'center'}}/>
+                            </div>
+                            <GoogleLogin
+                                clientId={process.env.REACT_APP_GOOGLE_API_ID}
+                                buttonText="Sign in with @fpt.edu.vn"
+                                onSuccess={handleLogin}
+                                onFailure={handleFailLogin}
+                                cookiePolicy={'single_host_origin'}
+                                className='button-google'
+                                icon={false}
+                                style={{boxShadow: "none"}}
+                                >
+                            </GoogleLogin>
+                        </div>
                 </div>
             </div>
         </div>

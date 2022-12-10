@@ -43,7 +43,7 @@ const Admin = () => {
                     <div style={{marginLeft: 20, marginRight: 20}}>
                         <UserOutlined height='60px' />
                     </div>
-                    <div onClick={() => {
+                    <div className="admin-header" onClick={() => {
                         localStorage.clear()
                         navigation('/login')
                     }} style={{marginRight : 20 , cursor : 'pointer'}}>

@@ -7,6 +7,7 @@ import { openNotificationWithIcon } from '../../request/notification';
 
 const AssessmentPlan = () => {
     const [listData, setListData] = useState([]);
+    const [show , setShow] = useState(true) 
     const location = useLocation()
     const id = window.location.pathname.split("/")[2];
     const navigation = useNavigate()
@@ -17,8 +18,15 @@ const AssessmentPlan = () => {
         const { data } = await apiClient.get(`/api/result-observation-slot?oSlotId=${id}`)
         setListData(data.items)
     }
+    const checkShowReview = async () => {
+        const { data } = await apiClient.get(`/api/status-observation-plan?planId=${id}`)
+        if(data?.items != 0){
+            setShow(false)
+        }
+    }
     useEffect(() => {
         _requestData()
+        checkShowReview()
     }, [])
     return (
         <div style={{ padding: 24 }}>
@@ -36,7 +44,7 @@ const AssessmentPlan = () => {
                     };
                 })}
             />
-            <div className='columns mt-5'>
+            {show && <div className='columns mt-5'>
                 <div className='column is-1' style={{ marginLeft: "40rem" }}>
                     <button onClick={async () => {
                         const {data} = await apiClient.post(`api/pass-observation-slot?oSlotId=1&pass=${2}`)
@@ -46,7 +54,7 @@ const AssessmentPlan = () => {
                         }
                     }} className='button is-danger'>
                         Không đạt
-            </button>
+                    </button>
                 </div>
                 <div onClick={async () => {
                         const {data} = await apiClient.post(`api/pass-observation-slot?oSlotId=1&pass=${1}`)
@@ -57,9 +65,9 @@ const AssessmentPlan = () => {
                     }} className='column'>
                     <button className='button is-success'>
                         Đạt yêu cầu
-            </button>
+                    </button>
                 </div>
-            </div>
+            </div>}
         </div>
     );
 };

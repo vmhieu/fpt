@@ -283,7 +283,7 @@ const PlanContainer = () => {
     <Header />
     <div className='plan-container'>
       <div className='modal-plan'>
-        <Button type="primary"  disabled={count ==listSemesters.length -1 ? false : true} onClick={showModal}>
+        <Button type="primary"  disabled={count ==listSemesters?.length -1 ? false : true} onClick={showModal}>
           Tạo kế hoạch dự giờ
         </Button>
         <Drawer

@@ -40,6 +40,12 @@ const AdminLecture = () => {
                 data : [],
                 type : 'select'
             },
+            {
+                name : 'department',
+                label : 'Bộ môn',
+                data : [],
+                type : 'department'
+            },
         ]
     )
     const [page , setPage] = useState({
@@ -79,10 +85,11 @@ const AdminLecture = () => {
         })
         setFormAdd(convertDataFormAdd)
     }
+    
     const _requestDataTable = async () => {
         const start = page.current == 1 ? 0 : page.current*page.number_of_page - page.number_of_page
         const end = page.current*page.number_of_page
-        const  {data}  = await apiClient.get(`/api/admin/list-account-role?roleId=3&start=${start}&end=${end}`)
+        const  {data}  = await apiClient.get(`/api/admin/list-account-role?roleId=2&start=${start}&end=${end}`)
         const convertData = data.items.map(item => {
             return {
                 key: item.id,
@@ -116,6 +123,7 @@ const AdminLecture = () => {
             userName : value.userName,
             email : value.email,
             campusId : value.campusId,
+            department :value.department,
             roles : [
                 {
                     id : 2
@@ -137,6 +145,7 @@ const AdminLecture = () => {
             userName : value.userName,
             email : value.email,
             campusId : value.campusId,
+            department :value.department,
             roles : [
                 {
                     id : 2

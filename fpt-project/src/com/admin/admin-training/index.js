@@ -87,13 +87,23 @@ const AdminLecture = () => {
     const _requestDataTable = async () => {
         const start = page.current == 1 ? 0 : page.current*page.number_of_page - page.number_of_page
         const end = page.current*page.number_of_page
-        const  {data}  = await apiClient.get(`/api/admin/list-account-role?roleId=2&start=${start}&end=${end}`)
-        const convertData = data.items.map(item => {
+        const  dataRole3  = await apiClient.get(`/api/admin/list-account-role?roleId=3&start=${start}&end=${end}`)
+        const  dataRole5  = await apiClient.get(`/api/admin/list-account-role?roleId=5&start=${start}&end=${end}`)
+        
+        const convertData = [...dataRole3.data.items.map(item => {
             return {
                 key: item.id,
                 ...item
             }
+        }) ,
+        ...dataRole5.data.items.map(item => {
+            return {
+                key: item.id,
+                trainingPro : true,
+                ...item
+            }
         })
+    ]
         setDataTable(convertData)
     }
     const _handleDel = () => {
@@ -146,7 +156,7 @@ const AdminLecture = () => {
             campusId : value.campusId,
             roles : [
                 {
-                    id : 3
+                    id : value.trainingPro ? 5 : 3
                 }
             ]
         }
@@ -204,6 +214,15 @@ const AdminLecture = () => {
                             dataIndex: 'campusName',
                             key: 'campusName',
                         },
+                        {
+                            title: 'TrainingPro',
+                            dataIndex: 'trainingPro',
+                            render: (_,record) => {
+                                console.log(record.trainingPro);
+                                
+                                return <Checkbox disabled checked={record.trainingPro}></Checkbox>
+                            },
+                        },
                     ]}
                     scroll={{ y: 'calc(100vh - 190px)' }} pagination={false}
                     rowSelection={{
@@ -250,7 +269,7 @@ const AdminLecture = () => {
                 _onSubmit={_handleAddNew}
             />
             <ModalFormDetail
-                visible={showDetail} jsonFormInput={formAdd}
+                visible={showDetail} jsonFormInput={formAdd.filter(i => i.name != 'trainingPro')}
                 _onClose={() => {
                     setShowDetail(false)
                     setTimeout(() => {

@@ -48,3 +48,37 @@
   padding: 16px 42px;
   font-size: 16px;
 }
+.tooltip-avatar{
+  position: absolute;
+  z-index: 20;
+  width: 200px;
+  /* height: 50px; */
+  padding: 5px 0px;
+  background-color: #f3f4f6;
+  right: 40px;
+  top: 20px;
+  border: 1px solid #DDD;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  visibility: hidden;
+}
+
+@keyframes tooltipAvt{
+  from{
+    transform: scale(0);
+  }
+  to{
+    transform: scale(1);
+  }
+}
+
+.tooltip-avatar-item:hover {
+  background: white;
+  cursor: pointer;
+}
+
+.img-cover:hover .tooltip-avatar{
+  visibility: visible;
+}

@@ -10,7 +10,9 @@ import { useNavigate } from 'react-router-dom';
 
 const Admin = () => {
     const [adminIndex , setAdminIndex] = useState(1)
-    const userName = localStorage.getItem("userName")
+    const profileObj = JSON.parse(localStorage.getItem("profileObj"));
+    console.log('profileObj' ,profileObj);
+    
 
 
     const objAdmin = {
@@ -36,18 +38,19 @@ const Admin = () => {
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', color: 'black', fontSize: 24, fontWeight: 500 }}>
+                <div style={{ display: 'flex', alignItems : 'center' , color: 'black', fontSize: 24, fontWeight: 500 }}>
                     <div>
-                        {userName}
+                        {profileObj?.name}
                     </div>
-                    <div style={{marginLeft: 20, marginRight: 20}}>
-                        <UserOutlined height='60px' />
-                    </div>
-                    <div className="admin-header" onClick={() => {
+                    <div className="img-cover" style={{marginRight : 20 , marginLeft : 30 , position : 'relative' }}> 
+                        <img style={{borderRadius : '50%'}} src={profileObj?.imageUrl} width="40px"/>
+                        <div className='tooltip-avatar'>
+                            <div className="tooltip-avatar-item" style={{fontSize : 16 , padding : '4px 10px' , display : 'flex' , alignContent : 'center' , flex : 1}}>Xem thông tin</div>
+                            <div onClick={() => {
                         localStorage.clear()
                         navigation('/login')
-                    }} style={{marginRight : 20 , cursor : 'pointer'}}>
-                        LogOut
+                    }} className="tooltip-avatar-item" style={{fontSize : 16 , padding : '4px 10px' , display : 'flex' , alignContent : 'center' , flex : 1}}>Logout</div>
+                        </div>
                     </div>
                 </div>
             </div>

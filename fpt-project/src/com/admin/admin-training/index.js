@@ -33,16 +33,7 @@ const AdminLecture = () => {
             {
                 name : 'email',
                 label : "Email",
-                rules: [
-                    {
-                      required: true,
-                      type: "email",
-                      message: "Vui lòng nhập email có đuổi @fpt.edu.vn",
-                    },
-                    // {
-                    //     required : true
-                    // }
-                  ],
+                
             },
             {
                 name : 'campusId',
@@ -271,6 +262,8 @@ const AdminLecture = () => {
             </CardCustom>
             {/* modal */}
             <AddNewForm
+                formAdd={formAdd}
+                setFormAdd={setFormAdd}
                 visible={showAddNew} jsonFormInput={formAdd}
                 _onClose={() => {
                     setShowAddNew(false)

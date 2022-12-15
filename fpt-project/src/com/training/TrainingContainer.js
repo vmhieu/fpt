@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../request-api/api_client';
 import { openNotificationWithIcon } from '../../request/notification';
 import '../../style/lecture.css'
+import Footer from '../Footer';
 import Header from '../Header';
 import TrainingChangeContainer from './TrainingChangeContainer';
 import TrainingDetail from './TrainingDetail';
@@ -203,6 +204,7 @@ const TrainingContainer = () => {
               {listData?.length > 0 && <Table columns={columns} dataSource={listData} />}
           </div>
         </div>
+        <Footer />
     </div>
   );
 };

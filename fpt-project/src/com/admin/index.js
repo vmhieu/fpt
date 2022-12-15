@@ -5,8 +5,7 @@ import AdminLecture from './admin-lecture';
 import AdminHOS from './admin-head-of-subject';
 import AdminTraining from './admin-training';
 import { useNavigate } from 'react-router-dom';
-
-
+import Footer from '../Footer';
 
 const Admin = () => {
     const [adminIndex , setAdminIndex] = useState(1)
@@ -55,6 +54,7 @@ const Admin = () => {
             <div>
                 {objAdmin[adminIndex]}
             </div>
+            <Footer />
         </div>
     );
 };

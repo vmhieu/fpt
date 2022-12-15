@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../request-api/api_client';
 import '../../style/lecture.css'
+import Footer from '../Footer';
 import Header from '../Header';
 import LectureDetailContainer from './LectureDetailContainer';
 const LectureContainer = () => {
@@ -144,6 +145,7 @@ const LectureContainer = () => {
           {listData?.length > 0 && <Table columns={columns} dataSource={listData} />}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

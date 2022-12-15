@@ -1,4 +1,4 @@
-import { Button, Modal, Table, Drawer, Select, Popconfirm, message } from 'antd';
+import { Button, Modal, Table, Drawer, Select, Popconfirm, message, DatePicker } from 'antd';
 import React, { useEffect, useState } from 'react';
 import ModalPlanContainer from './ModalPlanContainer';
 import '../../style/plan.css';
@@ -12,6 +12,10 @@ import {
   PlusOutlined, DeleteOutlined, FilterOutlined, ReloadOutlined,
   UploadOutlined, UnorderedListOutlined
 } from "@ant-design/icons";
+import Footer from '../Footer';
+import moment from 'moment';
+import ModalSlotContainer from './ModalSlotContainer';
+
 
 
 const dataStatus = [
@@ -39,6 +43,7 @@ const PlanContainer = () => {
   const navigation = useNavigate();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openSlot, setOpenSlot] = useState(false);
   const [listPlan, setListPlan] = useState();
   const [listSemesters, setListSemesters] = useState();
   const [semesterId, setSemesterId] = useState(1);
@@ -52,6 +57,7 @@ const PlanContainer = () => {
   const [accounts, setAccounts] = useState([]);
   const [selectedRow, setSelectRow] = useState([]);
   const [status , setStatus] = useState({});
+  const [planId, setPlanId] = useState();
 
 
   const campusId = localStorage.getItem('campusId');
@@ -65,6 +71,7 @@ const PlanContainer = () => {
   const _requestData = async () => {
     const { data } = await apiClient.get(`/api/list-observation-slot?semesterId=${semesterId}&accountId=${userId}`)
     _getStatusListPlan(data.items[0].id)
+    setPlanId(data.items[0].id)
     data.items = data.items.map((item, idx) => {
       var date = new Date(`${item.slotTime}`);
       item.slotTime =
@@ -146,17 +153,29 @@ const PlanContainer = () => {
   };
   const handleCancel = () => {
     setOpen(false);
+    setOpenSlot(false)
   };
   const columns = [
     {
       title: 'Id',
       dataIndex: 'id',
       key: 'id',
+      width: 100,
+      fixed: 'left',
     },
     {
       title: 'Thời gian',
       dataIndex: 'slotTime',
       key: 'slotTime',
+      render: (text, record, idx) => (
+        isUpdate && idx == index ?
+        <DatePicker style={{width: "13rem"}} onChange={(e) => onDatePickerChange(e, record)} disabledDate={(current) => {
+          console.log("");
+          return moment().add(-1, 'days')  >= current 
+          }}/>
+          // <Select className='select-box' style={{ width: '100%' }} defaultValue={text} options={accounts} onChange={(e) => handleAccount1Change(e, record)} />
+          : <div>{text}</div>
+      ),
     },
     {
       title: 'Ca học',
@@ -167,7 +186,7 @@ const PlanContainer = () => {
           <Select className='select-box' style={{ width: '100%' }} defaultValue={text} options={slot} onChange={(e) => handleSlotChange(e, record)} />
           : <div>{text}</div>
       ),
-      width: '10%'
+      width: 150
     },
     {
       title: 'Phòng học',
@@ -178,7 +197,8 @@ const PlanContainer = () => {
           <Select className='select-box' style={{ width: '100%' }} defaultValue={text} options={room} onChange={(e) => handleRoomChange(e, record)} />
           : <div>{text}</div>
       ),
-      width: '10%'
+      width: 150
+
 
     },
     {
@@ -190,8 +210,7 @@ const PlanContainer = () => {
           <Select className='select-box' style={{ width: '100%' }} defaultValue={text} options={subject} onChange={(e) => handleSubjectChange(e, record)} />
           : <div>{text}</div>
       ),
-      width: '10%'
-
+      width: 200
     },
     {
       title: 'Tên môn',
@@ -207,11 +226,21 @@ const PlanContainer = () => {
       title: 'Tên GV1',
       dataIndex: 'accountName1',
       key: 'accountName1',
+      render: (text, record, idx) => (
+        isUpdate && idx == index ?
+          <Select className='select-box' style={{ width: '100%' }} defaultValue={text} options={accounts} onChange={(e) => handleAccount1Change(e, record)} />
+          : <div>{text}</div>
+      ),
     },
     {
       title: 'Tên GV2',
       dataIndex: 'accountName2',
       key: 'accountName2',
+      render: (text, record, idx) => (
+        isUpdate && idx == index ?
+          <Select className='select-box' style={{ width: '100%' }} defaultValue={text} options={accounts} onChange={(e) => handleAccount2Change(e, record)} />
+          : <div>{text}</div>
+      ),
     },
     {
       title: 'Lý do',
@@ -222,6 +251,8 @@ const PlanContainer = () => {
       title: 'Kết quả',
       key: 'result',
       dataIndex: 'result',
+      fixed: 'right',
+      width: 130,
       render: (text, record) => (
         <Button onClick={() => handleNavigation(record)}>
           {"Kết quả"}
@@ -230,6 +261,8 @@ const PlanContainer = () => {
     },
     {
       title: 'Cập nhật',
+      fixed: 'right',
+      width: 130,
       render: (text, record, idx) => (
         isUpdate && idx == index ?
           <Button type="primary" variant="outlined" onClick={handleClickOpen}>
@@ -274,20 +307,42 @@ const PlanContainer = () => {
     var values = { ...record, subjectId: e }
     setResult(values);
   }
+  const handleAccount1Change = (e, record) => {
+    var values = { ...record, accountId1: e }
+    setResult(values);
+  }
+  const handleAccount2Change = (e, record) => {
+    var values = { ...record, accountId2: e }
+    setResult(values);
+  }
+  const onDatePickerChange = (e, record) => {
+    console.log("dfhsdkjfhs: ", record)
+    var date = new Date(e._d),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+      var dateResult = [date.getFullYear(), mnth, day].join("-");
+      console.log("eeeeee:", dateResult);
+    var values = { ...record, slotTime: dateResult }
+    setResult(values);
+  }
   const [isUpdate, setIsUpdate] = useState(false);
   const [index, setIndex] = useState(-1);
   const updateSlot = (values, index) => {
+    setResult(values)
     setIsUpdate(true);
     setIndex(index);
   }
 
   const postUpdateSlot = async () => {
+    console.log("1111111111: ", result);
     var values = {
       id: result.id,
       accountId: result.accountId,
       subjectId: result.subjectId,
       reason: result.reason,
-      slotTime: result.slotTime.split("/").reverse().join("-"),
+      // slotTime: result.slotTime.split("/").reverse().join("-"),
+      
+      slotTime: result.slotTime,
       slotId: result.slotId,
       roomId: result.roomId,
       className: result.className,
@@ -296,6 +351,8 @@ const PlanContainer = () => {
       accountId1: result.accountId1,
       accountId2: result.accountId2,
     };
+    console.log("2222222222222222222: ", values);
+    handleClose();
     const { data } = await apiClient.post('/api/update-observation-slot', values)
     setDialogOpen(false);
     if (data.status == 200) {
@@ -354,6 +411,20 @@ const PlanContainer = () => {
           >
             <ModalPlanContainer handleCancel={handleCancel} />
           </Drawer>
+          <Drawer
+            width={820}
+            open={openSlot}
+            title={
+              <div className='has-text-weight-bold is-size-4'>
+                Tạo slot
+            </div>
+            }
+            onOk={handleOk}
+            onClose={handleCancel}
+            footer={null}
+          >
+            <ModalSlotContainer handleCancel={handleCancel} planId={planId}/>
+          </Drawer>
         </div>
         <Dialog
           open={dialogOpen}
@@ -400,11 +471,11 @@ const PlanContainer = () => {
 
                   _onReload={_requestData}
                   _handleDel={selectedRow.length > 0 ? _handleDel : () => { }}
-                  // _onClickAdd={() => setShowAddNew(true)}
+                  _onClickAdd={() => setOpenSlot(true)}
               // _onClickColumnShow={() => setShowColumn(true)}
               />}
               >
-                <Table
+                <Table style={{width: '1300px'}}
                   rowSelection={{
                     type: 'checkbox',
                     onChange: (selectedRowKeys, selectedRows) => {
@@ -413,10 +484,14 @@ const PlanContainer = () => {
                     }
                   }}
                   columns={columns}
+                  scroll={{
+                    x: 2253.63,
+                  }}
                   dataSource={listPlan} /></CardCustom>}
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };
@@ -438,6 +513,7 @@ const Extra = ({
       <div style={{ display: 'flex', alignItems: 'center', paddingRight: 7, justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', flex: 1 }}>
               <div style={{ display: 'flex' }}>
+                  <Button onClick={() => _onClickAdd()} className="ro-custom" type="text" icon={<PlusOutlined />} >Thêm</Button>
                   {!showDel ? null : <Button onClick={_handleDel} className="ro-custom" type="text" icon={<DeleteOutlined />} >Xoá item đã chọn</Button>}
                   <Button onClick={() => _onReload()} className="ro-custom" type="text" icon={<ReloadOutlined />} >Làm mới</Button>
                   {/* <Button onClick={_onClickAdd} className="ro-custom" type="text" icon={<PlusOutlined />} >Thêm</Button> */}

@@ -24,6 +24,7 @@ const Login = () => {
     }
     const handleLogin =async (ggApi) => {
         console.log('gg', ggApi);
+        localStorage.setItem("profileObj", JSON.stringify(ggApi.profileObj))
         if(campus){
             const body = {
                 token : ggApi.tokenId,
@@ -38,7 +39,6 @@ const Login = () => {
                 localStorage.setItem("access_token" , data.accessToken)
                 localStorage.setItem("campusId", data.campusId)
                 localStorage.setItem("userId", data.userId)
-                localStorage.setItem("userName", data.userName)
                 localStorage.setItem("role", JSON.stringify(role))
 
                 navigation('/admin')

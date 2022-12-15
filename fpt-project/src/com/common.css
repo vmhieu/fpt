@@ -68,3 +68,21 @@
 .admin-header:hover{
     color: yellow !important;
 }
+
+.position-header{
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.position-header-active{
+    border-bottom: 3px solid white;
+    color: aqua;
+}
+
+.position-header:hover{
+    color: aqua;
+    cursor: pointer;
+}

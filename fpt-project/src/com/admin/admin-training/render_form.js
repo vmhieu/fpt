@@ -40,8 +40,20 @@ export const RenderForm = ({ jsonFrom, _handleChange = () => { }, dataInit }) =>
                         </Form.Item>
                     )
                 }
+                // if(item.name == 'email'){
+                //     <Form.Item
+                //         key={String(index)}
+                //         name={item.name}
+                //         label={item.label}
+                //         rules={item.rules}
+                //         style={item.hidden ? { display: 'none' } : { margin: '0', width: '45%' }}
+                //     >
+                //         <Input disabled={item.disabled} />
+                //     </Form.Item>
+                // }
                 return (
                     <Form.Item
+                    messageVariables={{ label: 'good' }}
                         key={String(index)}
                         name={item.name}
                         label={item.label}

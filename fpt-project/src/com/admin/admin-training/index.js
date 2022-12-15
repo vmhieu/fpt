@@ -32,7 +32,8 @@ const AdminLecture = () => {
             },
             {
                 name : 'email',
-                label : "Email"
+                label : "Email",
+                
             },
             {
                 name : 'campusId',
@@ -85,6 +86,7 @@ const AdminLecture = () => {
         setFormAdd(convertDataFormAdd)
     }
     const _requestDataTable = async () => {
+
         const start = page.current == 1 ? 0 : page.current*page.number_of_page - page.number_of_page
         const end = page.current*page.number_of_page
         const  dataRole3  = await apiClient.get(`/api/admin/list-account-role?roleId=3&start=${start}&end=${end}`)
@@ -240,7 +242,8 @@ const AdminLecture = () => {
                                     id : r.id,
                                     userName : r.userName,
                                     email : r.email,
-                                    campusId: listCampus.find(i => i.label == r.campusName).value
+                                    campusId: listCampus.find(i => i.label == r.campusName).value,
+                                    trainingPro : r.trainingPro
                                 }, type: "EDIT"
                             })
                             // r.dates.split(",")
@@ -259,6 +262,8 @@ const AdminLecture = () => {
             </CardCustom>
             {/* modal */}
             <AddNewForm
+                formAdd={formAdd}
+                setFormAdd={setFormAdd}
                 visible={showAddNew} jsonFormInput={formAdd}
                 _onClose={() => {
                     setShowAddNew(false)
@@ -269,7 +274,7 @@ const AdminLecture = () => {
                 _onSubmit={_handleAddNew}
             />
             <ModalFormDetail
-                visible={showDetail} jsonFormInput={formAdd.filter(i => i.name != 'trainingPro')}
+                visible={showDetail} jsonFormInput={formAdd}
                 _onClose={() => {
                     setShowDetail(false)
                     setTimeout(() => {

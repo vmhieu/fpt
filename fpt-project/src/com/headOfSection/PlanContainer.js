@@ -64,7 +64,6 @@ const PlanContainer = () => {
 
   const _getStatusListPlan = async(id) => {
     const { data } = await apiClient.get(`/api/status-observation-plan?planId=${id}`)
-    console.log("daaaa" ,data);
     setStatus(dataStatus[data.items])
   }
 
@@ -121,8 +120,12 @@ const PlanContainer = () => {
 
   const getSemesters = async () => {
     const { data } = await apiClient.get('/api/semester-list')
-    setSemesterId(data.length)
     setListSemesters(data);
+  }
+
+  const getSemesterCurrent = async () => {
+    const { data } = await apiClient.get('/api/semester-current')
+    setSemesterId(data?.items)
   }
 
   useEffect(() => {
@@ -132,6 +135,7 @@ const PlanContainer = () => {
     getSubjects();
     getAccounts();
     setIsDone(true)
+    getSemesterCurrent()
   }, [])
 
   useEffect(() => {

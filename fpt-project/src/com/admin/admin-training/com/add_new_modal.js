@@ -59,21 +59,23 @@ const ModalForm = ({
   };
 
   const handleChangeForm = (value) => {
-    if(value?.email && value.email.split('@')[1] != "fpt.edu.vn"){
-      form.setFields([
-        {
-          name : 'email',
-          errors : ['Vui lòng nhập email có đuôi là @fpt.edu.vn']
-        }
-      ])
-    }
-    else {
-      form.setFields([
-        {
-          name : 'email',
-          errors : false
-        }
-      ])
+    if(value?.email){
+      if(value.email.split('@')[1] != "fpt.edu.vn"){
+        form.setFields([
+          {
+            name : 'email',
+            errors : ['Vui lòng nhập email có đuôi là @fpt.edu.vn']
+          }
+        ])
+      }
+      else {
+        form.setFields([
+          {
+            name : 'email',
+            errors : false
+          }
+        ])
+      }
     }
   }
 

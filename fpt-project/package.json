@@ -5,17 +5,13 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-<<<<<<< HEAD
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-regular-svg-icons": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@mui/material": "^5.10.12",
-=======
     "@headlessui/react": "^1.7.5",
     "@mui/icons-material": "^5.11.0",
-    "@mui/material": "^5.11.0",
->>>>>>> 38998c5140245dadd45acd6f039ca43870e62c11
+    "@mui/material": "^5.10.12",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

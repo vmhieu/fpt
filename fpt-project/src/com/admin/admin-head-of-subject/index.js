@@ -28,11 +28,23 @@ const AdminLecture = () => {
         [
             {
                 name : 'userName',
-                label : 'Tên'
+                label : 'Tên',
+                rules: [
+                    {
+                      required: true,
+                      message: 'Missing name',
+                    },
+                  ]
             },
             {
                 name : 'email',
-                label : "Email"
+                label : "Email",
+                rules:[
+                    {
+                      required: true,
+                      message: 'Missing email',
+                    },
+                  ]
             },
             {
                 name : 'campusId',

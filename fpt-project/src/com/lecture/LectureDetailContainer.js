@@ -5,6 +5,7 @@ import { apiClient } from '../../request-api/api_client';
 import '../../style/lecture.css'
 import Header from '../Header';
 import { openNotificationWithIcon } from '../../request/notification';
+import FormItem from 'antd/es/form/FormItem';
 
 const LectureDetailContainer = (props) => {
   const { record ,onCancel} = props;
@@ -49,43 +50,7 @@ const LectureDetailContainer = (props) => {
     }, 2000)
   }, [record.id])
 
-  const columnsEnable = [
-    {
-      title: 'STT',
-      dataIndex: 'stt',
-      render: (text, record, index) => index + 1,
-    },
-    {
-      title: 'Tên tiêu chí',
-      dataIndex: 'criteriaName',
-      key: 'criteriaName',
-    },
-    {
-      title: 'Nhập điểm',
-      render: (text, record, index) =>
-        <Input type="number" max={4} min={1} onChange={(e) => onPointChange(record, e, index)} />
-    },
-  ]
-  
-  const columnsDisable = [
-    {
-      title: 'STT',
-      dataIndex: 'stt',
-      render: (text, record, index) => index + 1,
-    },
-    {
-      title: 'Tên tiêu chí',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Nhập điểm',
-      dataIndex: 'point',
-      key: 'point',
-      render: (text, record, index) =>
-        <Input type="number" defaultValue={dataInput.listOfObservationDetail[index].point} max={4} min={1} onChange={(e) => onPointChange(record, e, index)} />
-    },
-  ]
+ 
 
   const onPointChange = (values, e, index) => {
     const record = { "code": values.criteriaCode, "name": values.criteriaName, "point": parseInt(e.target.value) }
@@ -185,7 +150,60 @@ const LectureDetailContainer = (props) => {
 
           </Form.Item>
 
-          {listData?.length > 0 && <Table key={index} columns={Object.keys(dataInput).length !== 0 && dataInput.constructor === Object ? columnsDisable :  columnsEnable} dataSource={Object.keys(dataInput).length !== 0 && dataInput.constructor === Object ? dataInput.listOfObservationDetail :  listData} pagination={false} />}
+          <div className='columns px-1' style={{borderBottom: '1px solid black'}}>
+            <div className='column has-text-weight-bold'>STT</div>
+            <div className='column has-text-weight-bold'>Tên tiêu chí</div>
+            <div className='column has-text-weight-bold'>Điểm</div>
+          </div>
+          {Object.keys(dataInput).length !== 0 && dataInput.constructor === Object ?
+          <div>
+
+            {dataInput.listOfObservationDetail?.length > 0 && dataInput.listOfObservationDetail.map((e, idx) => {
+              return(
+                <div className='columns'>
+                  <div className='column'>{idx + 1}</div>
+                  <div className='column'>{e.name}</div>
+                  <div className='column'>
+                    <FormItem
+                      name={idx}
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Missing semester',
+                        },
+                       ]}>
+                          <Input type="number" defaultValue={dataInput.listOfObservationDetail[idx].point} max={4} min={1} onChange={(e) => onPointChange(record, e, index)} />
+                    </FormItem>
+                  </div>
+                </div>
+              )
+            })}
+            </div>
+            :
+            <div>
+
+              {listData?.length > 0 && listData.map((e, idx) => {
+                return(
+                  <div className='columns'>
+                  <div className='column'>{idx + 1}</div>
+                  <div className='column'>{e.name}</div>
+                  <div className='column'>
+                    <FormItem
+                      name={idx}
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Missing semester',
+                        },
+                       ]}>
+                      <Input type="number" max={4} min={1} onChange={(e) => onPointChange(record, e, index)} />
+                    </FormItem>
+                  </div>
+                </div>
+                  )
+                })}
+            </div> 
+          }
           <h1 className='pt-4'>Ưu điểm</h1>
           <Form.Item
             name="advantage"

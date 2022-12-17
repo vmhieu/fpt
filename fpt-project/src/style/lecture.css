@@ -7,4 +7,10 @@
 .text-area-antd{
   max-width: 500% !important;
 }
+.ant-modal-confirm-confirm{
+  margin: 10rem auto !important;
+}
+.ant-modal-confirm-confirm .ant-modal-content{
+  width: 500px;
+}
 

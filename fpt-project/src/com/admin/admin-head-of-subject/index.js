@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     Pagination, Input, Button, Upload, Checkbox,
-    Image, Popover, List
+    Image, Popover, List, Space
 } from "antd";
 import {
     PlusOutlined, DeleteOutlined, FilterOutlined, ReloadOutlined,
@@ -15,6 +15,9 @@ import AddNewForm from './com/add_new_modal';
 import ModalFormDetail from './com/detail_modal';
 
 import { openNotificationWithIcon } from '../../../request/notification';
+import { debounce } from '@mui/material';
+const { Search } = Input;
+
 // import ModalFormDetail from './com/detail_modal';
 // import FilterForm from './com/filter_modal';
 // import ColumnForm from './com/column_modal';
@@ -24,6 +27,7 @@ const AdminLecture = () => {
     const [dataTable, setDataTable] = useState([])
     const [total , setTotal] = useState(10)
     const [listCampus, setListCampus] = React.useState([])
+    const [departmentOptions, setDepartmentOptions] = useState([]);
     const [formAdd , setFormAdd] = React.useState(
         [
             {
@@ -42,6 +46,7 @@ const AdminLecture = () => {
                 rules:[
                     {
                       required: true,
+                      type : 'email',
                       message: 'Missing email',
                     },
                   ]
@@ -53,7 +58,7 @@ const AdminLecture = () => {
                 type : 'select'
             },
             {
-                name : 'department',
+                name : 'departmentId',
                 label : 'Bộ môn',
                 data : [],
                 type : 'department'
@@ -98,10 +103,10 @@ const AdminLecture = () => {
         setFormAdd(convertDataFormAdd)
     }
     
-    const _requestDataTable = async () => {
+    const _requestDataTable = async (search="") => {
         const start = page.current == 1 ? 0 : page.current*page.number_of_page - page.number_of_page
         const end = page.current*page.number_of_page
-        const  {data}  = await apiClient.get(`/api/admin/list-account-role?roleId=2&start=${start}&end=${end}`)
+        const  {data}  = await apiClient.get(`/api/admin/list-account-role?roleId=2&email=${search}&start=${start}&end=${end}`)
         const convertData = data.items.map(item => {
             return {
                 key: item.id,
@@ -135,7 +140,7 @@ const AdminLecture = () => {
             userName : value.userName,
             email : value.email,
             campusId : value.campusId,
-            department :value.department,
+            departmentId : departmentOptions.find(i => i.value == value.departmentId).key,
             roles : [
                 {
                     id : 2
@@ -157,7 +162,7 @@ const AdminLecture = () => {
             userName : value.userName,
             email : value.email,
             campusId : value.campusId,
-            department :value.department,
+            departmentId : departmentOptions.find(i => i.value == value.departmentName).key,
             roles : [
                 {
                     id : 2
@@ -174,13 +179,39 @@ const AdminLecture = () => {
         
     }
     
+    const onChangeSearch = (e) => {
+        debounceReqData(e);
+    }
+    const debounceReqData = useCallback(debounce((nextValue) => _requestDataTable(nextValue), 1000), [])
     const _handleReset = () => {
         _requestDataTable()
     }
+
+    const _requestDataDepartment = async (searchText = '') => {
+        const campusId = localStorage.getItem("campusId");
+        const { data } = await apiClient.get(`/api/list-department?id=${campusId}&name=${searchText}`)
+        const searchData = [];
+        if (data && data.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+                searchData.push({ value: data[i].name })
+            }
+        }
+        setDepartmentOptions(
+            data.map(item => {
+                return {
+                    value : item.name,
+                    key : item.value
+                }
+            }),
+        );
+    }
+
     useEffect(() => {
+        _requestDataDepartment()
         _requestDataTable()
         _requestData()
     }, [page])
+    
     return (
         <div style={{}}>
             <CardCustom
@@ -192,6 +223,7 @@ const AdminLecture = () => {
                     _onReload={_handleReset}
                     _handleDel={selectedRow.length > 0 ? _handleDel : () => { }}
                     _onClickAdd={() => setShowAddNew(true)}
+                    _onChange={(e) => onChangeSearch(e)}
                 // _onClickColumnShow={() => setShowColumn(true)}
                 />}
             >
@@ -235,6 +267,7 @@ const AdminLecture = () => {
                                     id : r.id,
                                     userName : r.userName,
                                     email : r.email,
+                                    departmentName : r.departmentName,
                                     campusId: listCampus.find(i => i.label == r.campusName).value
                                 }, type: "EDIT"
                             })
@@ -264,7 +297,15 @@ const AdminLecture = () => {
                 _onSubmit={_handleAddNew}
             />
             <ModalFormDetail
-                visible={showDetail} jsonFormInput={formAdd}
+                visible={showDetail} jsonFormInput={formAdd.map(i => {
+                    if(i.name=='departmentId'){
+                        return {
+                            ...i,
+                            name : 'departmentName'
+                        }
+                    }
+                    return i
+                })}
                 _onClose={() => {
                     setShowDetail(false)
                     setTimeout(() => {
@@ -278,6 +319,8 @@ const AdminLecture = () => {
     );
 };
 
+const onSearch = (value) => console.log(value);
+
 const Extra = ({
     showDel = true,
 
@@ -285,6 +328,7 @@ const Extra = ({
     _onClickAdd = () => { },
     _onFilter = () => { },
     _onReload = () => { },
+    _onChange = () => {}
     // _onClickColumnShow = () => { },
 }) => {
 
@@ -292,6 +336,16 @@ const Extra = ({
         <div style={{ display: 'flex', alignItems: 'center', paddingRight: 7, justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', flex: 1 }}>
                 <div style={{ display: 'flex' }}>
+                    <Space direction="vertical">
+                        <Search
+                            placeholder="Tìm kiếm tài khoản"
+                            onSearch={onSearch}
+                            onChange={(e) => _onChange(e.target.value)}
+                            style={{
+                                width: 200,
+                            }}
+                        />
+                    </Space>
                     {!showDel ? null : <Button onClick={_handleDel} className="ro-custom" type="text" icon={<DeleteOutlined />} >Xoá item đã chọn</Button>}
                     <Button onClick={() => _onReload()} className="ro-custom" type="text" icon={<ReloadOutlined />} >Làm mới</Button>
                     <Button onClick={_onClickAdd} className="ro-custom" type="text" icon={<PlusOutlined />} >Thêm</Button>

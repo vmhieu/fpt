@@ -1,13 +1,13 @@
 import React from 'react';
 import '../style/footer.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLocationDot, faCopy, faLocationArrow, faSearchLocation, faMailBulk, faMailForward, faVoicemail, faMailReplyAll, faMailReply, faMobilePhone, faHeadphones, faPhone, faMapMarked, faMapLocationDot, faMapPin, faMap } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faLocationDot, faCopy, faLocationArrow, faSearchLocation, faMailBulk, faMailForward, faVoicemail, faMailReplyAll, faMailReply, faMobilePhone, faHeadphones, faPhone, faMapMarked, faMapLocationDot, faMapPin, faMap } from "@fortawesome/free-solid-svg-icons";
 
 
 const Footer = () => {
   return (
     <div className='has-background-light mt-5'>
-      <div className='columns px-6 pt-6 pb-0' style={{width: '100%'}}>
+      {/* <div className='columns px-6 pt-6 pb-0' style={{width: '100%'}}>
           <div className='column is-5' style={{marginTop: '-20px'}}>
               <img src='https://wwwcdn.teachstone.com/content/uploads/2019/11/CLASS-logo_2-1-e1612273275196.png' style={{width: "150px"}}/>
               <p className='py-3'>ksdfhkjshdfjdfhskjfhsdkjfhsfkjshksdfhkjshdfjdfhskj
@@ -43,7 +43,7 @@ const Footer = () => {
               <div className='column has-text-info'>096.333.1972</div>
             </div>
           </div>
-      </div>
+      </div> */}
     </div>
   );
 };

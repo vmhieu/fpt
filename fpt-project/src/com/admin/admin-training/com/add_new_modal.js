@@ -48,31 +48,54 @@ const ModalForm = ({
   // handle
   const onFinish = (val) => {
     try {
-      setLoading(true);
-      _onSubmit(val)
-      _onClose()
-      setLoading(false);
+      if (val.email) {
+        if (val.email.split('@')[1] != "fpt.edu.vn") {
+          form.setFields([
+            {
+              name: 'email',
+              required : true,
+              errors: ['Vui lòng nhập email có đuôi là @fpt.edu.vn']
+            }
+          ])
+        }
+        else {
+          setLoading(true);
+          _onSubmit(val)
+          _onClose()
+          setLoading(false);
+        }
+      
+      }
+      else{
+        form.setFields([
+          {
+            name: 'email',
+            errors: ['Vui lòng nhập email']
+          }
+        ])
+      }
       // _onClose()
     } catch (err) {
       setLoading(false);
     }
   };
 
-  const handleChangeForm = (value) => {
-    if(value?.email){
-      if(value.email.split('@')[1] != "fpt.edu.vn"){
+  const handleChangeForm = (value, allValue) => {
+    if (allValue.email) {
+      if (value.email.split('@')[1] != "fpt.edu.vn") {
         form.setFields([
           {
-            name : 'email',
-            errors : ['Vui lòng nhập email có đuôi là @fpt.edu.vn']
+            name: 'email',
+            required : true,
+            errors: ['Vui lòng nhập email có đuôi là @fpt.edu.vn']
           }
         ])
       }
       else {
         form.setFields([
           {
-            name : 'email',
-            errors : false
+            name: 'email',
+            errors: false
           }
         ])
       }

@@ -6,6 +6,7 @@ import { apiClient } from '../../../request-api/api_client';
 const { Option } = Select;
 export const RenderForm = ({ jsonFrom, _handleChange = () => { }, dataInit }) => {
     const [departmentOptions, setDepartmentOptions] = useState([]);
+    const [departmentValue , setDepartmentValue] = useState('');
     const { RangePicker } = DatePicker;
 
     const _requestDataDepartment = async (searchText = '') => {
@@ -20,11 +21,17 @@ export const RenderForm = ({ jsonFrom, _handleChange = () => { }, dataInit }) =>
         setDepartmentOptions(
             data.map(item => {
                 return {
-                    label : item.name,
-                    value : item.value
+                    value : item.name,
+                    key : item.value
                 }
             }),
         );
+    }
+
+    const onSelect = (e , op) =>{
+        console.log(op.key)
+        setDepartmentValue(op.key)
+        
     }
     useEffect(() => {
         _requestDataDepartment()
@@ -45,6 +52,7 @@ export const RenderForm = ({ jsonFrom, _handleChange = () => { }, dataInit }) =>
                             <AutoComplete
                                 options={departmentOptions}
                                 // value={departmentValue}
+                                onSelect={onSelect}
                                 style={{
                                     width: 200,
                                 }}

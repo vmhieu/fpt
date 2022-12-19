@@ -48,6 +48,8 @@ const ModalForm = ({
   console.log(visible)
   const type = useMemo(() => get(visible, 'type', 'add'), [visible]);
   const dataInit = useMemo(() => get(visible, 'data', {}), [visible]);
+  console.log('dataInit' ,dataInit);
+  
   // effect
   useEffect(() => form.resetFields(), [dataInit]);
   // handle

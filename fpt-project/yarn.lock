@@ -1369,6 +1369,13 @@
   dependencies:
     client-only "^0.0.1"
 
+"@headlessui/react@^1.7.5":
+  version "1.7.7"
+  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.7.7.tgz#d6f8708d8943ae8ebb1a6929108234e4515ac7e8"
+  integrity sha512-BqDOd/tB9u2tA0T3Z0fn18ktw+KbVwMnkxxsGPIH2hzssrQhKB5n/6StZOyvLYP/FsYtvuXfi9I0YowKPv2c1w==
+  dependencies:
+    client-only "^0.0.1"
+
 "@humanwhocodes/config-array@^0.11.6":
   version "0.11.7"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.7.tgz#38aec044c6c828f6ed51d5d7ae3d9b9faf6dbb0f"
@@ -1719,7 +1726,11 @@
   dependencies:
     "@babel/runtime" "^7.20.6"
 
+<<<<<<< HEAD
 "@mui/material@^5.11.0":
+=======
+"@mui/material@^5.10.12":
+>>>>>>> 5a3fda6aba62dc7b274cc5f3cd3a62b930725c78
   version "5.11.0"
   resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.11.0.tgz#01ead6ca389de440fbc78b2dbb8547845ca40f93"
   integrity sha512-8Zl34lb89rLKTTi50Kakki675/LLHMKKnkp8Ee3rAZ2qmisQlRODsGh1MBjENKp0vwhQnNSvlsCfJteVTfotPQ==

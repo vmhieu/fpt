@@ -20,15 +20,15 @@ const ModalPlanContainer = ({handleCancel}) => {
   const [slot, setSlot] = useState([]);
   
 
-  const getDepartments = async (searchText) => {
-    const {data} = await apiClient.get(`/api/list-department?id=${campusId}&name=${searchText}`)
-    return data[0].value;
-  }
+  // const getDepartments = async (searchText) => {
+  //   const {data} = await apiClient.get(`/api/list-department?id=${campusId}&name=${searchText}`)
+  //   return data[0].value;
+  // }
 
   const getSemesters = async () => {
     const {data} = await apiClient.get('/api/semester-list')
-    var rooms = data[data.length - 1];
-    rooms = rooms.map((item, idx) => {
+    // var rooms = data[data.length - 1];
+    const rooms = data.map((item, idx) => {
       return {...item, label: item.name}
     })
     setSemesters(rooms);
@@ -121,15 +121,23 @@ const ModalPlanContainer = ({handleCancel}) => {
       ...fieldValues,
       "observationSlotsRequest": observationSlotsRequest
     }
-    var department = getDepartments(fieldValues.departmentId);
-    department.then(function(result) {
-      const finalValues = {
-        ...values,
-        "campusId": parseInt(campusId),
-        "departmentId": result,
-      }
-      postPlan(finalValues);
-    })
+    // var department = getDepartments(fieldValues.departmentId);
+    // department.then(function(result) {
+    //   const finalValues = {
+    //     ...values,
+    //     "campusId": parseInt(campusId),
+    //     "accountId": userId,
+    //     "planStatus": null
+    //   }
+    //   postPlan(finalValues);
+    // })
+    const finalValues = {
+      ...values,
+      "campusId": parseInt(campusId),
+      "accountId": parseInt(userId),
+      "planStatus": null
+    }
+    postPlan(finalValues);
   };
 
   const postPlan = async (values) => {
@@ -203,7 +211,7 @@ const ModalPlanContainer = ({handleCancel}) => {
         >
           <Select className='select-box' options={semesters} onChange={handleChange} />
         </Form.Item>
-        <Form.Item
+        {/* <Form.Item
           name="departmentId"
           label="Department"
           rules={[
@@ -222,7 +230,7 @@ const ModalPlanContainer = ({handleCancel}) => {
             onSearch={onDepartmentSearch}
             placeholder="Department"
           />
-        </Form.Item>
+        </Form.Item> */}
       </div>
       <Form.List name="observationSlotsRequest">
         {(fields, { add, remove }) => (

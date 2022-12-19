@@ -355,7 +355,6 @@ const PlanContainer = () => {
       accountId1: result.accountId1,
       accountId2: result.accountId2,
     };
-    console.log("2222222222222222222: ", values);
     handleClose();
     const { data } = await apiClient.post('/api/update-observation-slot', values)
     setDialogOpen(false);

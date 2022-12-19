@@ -8,8 +8,6 @@ const Header = () => {
     const navigation = useNavigate()
     const {pathname} = useLocation();
 
-    
-
     return (
         <div style={{ height: 60, background: '#0a8cf1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40 }}>
             <div style={{ display: 'flex', width: '90', height: "80%" }}>

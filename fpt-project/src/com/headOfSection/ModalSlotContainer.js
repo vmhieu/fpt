@@ -27,12 +27,15 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
 
   const getSemesters = async () => {
     const {data} = await apiClient.get('/api/semester-list')
-    var rooms = data[data.length - 1];
-    rooms = rooms.map((item, idx) => {
+    // var rooms = data[data.length - 1];
+    // const rooms = data;
+    const rooms = data.map((item, idx) => {
       return {...item, label: item.name}
     })
     setSemesters(rooms);
   }
+
+  console.log("semesters: " + semesters);
   const getSlot = async () => {
     const {data} = await apiClient.get('/api/slot-list')
     var rooms = data;
@@ -92,14 +95,11 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
   };
 
   const onFinish = (fieldValues) => {
-
     const ACCOUNT_DICT = Object.fromEntries(
       accounts.map(item => [item.name, item])
     );
-
-
-    var observationSlotsRequest = fieldValues.observationSlotsRequest;
-    observationSlotsRequest = observationSlotsRequest.map((item) => {
+      const item = fieldValues;
+    
       var date = new Date(item.slotTime._d),
       mnth = ("0" + (date.getMonth() + 1)).slice(-2),
       day = ("0" + date.getDate()).slice(-2);
@@ -108,7 +108,7 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
       var accountId1 = ACCOUNT_DICT[item.accountId1].value;
       var accountId2 = ACCOUNT_DICT[item.accountId2].value;
 
-      return {...item,
+      var values = {...item,
         headSubject: parseInt(userId),
         slotTime: dateResult,
         headTraining: 1,
@@ -116,20 +116,7 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
         accountId1: parseInt(accountId1),
         accountId2: parseInt(accountId2),
       }
-    })
-    var values = {
-      ...fieldValues,
-      "observationSlotsRequest": observationSlotsRequest
-    }
-    var department = getDepartments(fieldValues.departmentId);
-    department.then(function(result) {
-      const finalValues = {
-        ...values,
-        "campusId": parseInt(campusId),
-        "departmentId": result,
-      }
-      postPlan(finalValues);
-    })
+      postPlan(values);
   };
 
   const postPlan = async (values) => {
@@ -142,6 +129,7 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
     openNotificationWithIcon("error", "Thất bại")
   }
   }
+
   const handleChange = () => {
     form.setFieldsValue({
     });
@@ -190,63 +178,15 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
     <div>
     <div className='form-container'>
     <Form form={form} name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
-      <div className='form-util'>
-        <Form.Item
-          name="semesterId"
-          label="Semester"
-          rules={[
-            {
-              required: true,
-              message: 'Missing semester',
-            },
-          ]}
-        >
-          <Select className='select-box' options={semesters} onChange={handleChange} />
-        </Form.Item>
-        <Form.Item
-          name="departmentId"
-          label="Department"
-          rules={[
-            {
-              required: true,
-              message: 'Missing department',
-            },
-          ]}
-        >
-          <AutoComplete
-            options={departmentOptions}
-            value={departmentValue}
-            style={{
-              width: 200,
-            }}
-            onSearch={onDepartmentSearch}
-            placeholder="Department"
-          />
-        </Form.Item>
-      </div>
-      <Form.List name="observationSlotsRequest">
-        {(fields, { add, remove }) => (
+      
           <>
-            {fields.map((field, index) => (
-              <div className='form-detail pl-4' key={index}>
-              <Space key={field.key} align="start">
-                <div className='form-slot'>
+              <div className='form-detail pl-4'>
+                <div className='form-slot pr-5'>
                   <div className='columns mt-4 '>
-
                   <div className='column is-flex is-justify-content-end'>
-
-                    <Form.Item
-                      shouldUpdate={(prevValues, curValues) =>
-                        prevValues.area !== curValues.area || prevValues.sights !== curValues.sights
-                      }
-                    >
-                      {() => (
-
-
                         <Form.Item
-                          {...field}
                           label="AccountId"
-                          name={[field.name, 'accountId']}
+                          name={['accountId']}
                           rules={[
                             {
                               required: true,
@@ -271,26 +211,15 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
                               onChange={handleChange}
                               placeholder="input here"
                             />
-                          {/* <Select className='select-box' options={accounts} onChange={handleChange} /> */}
                         </Form.Item>
 
-
-                      )}
-                    </Form.Item>
                     </div>
                     
                     <div className='column is-flex is-justify-content-end'>
-                    <Form.Item
-                      shouldUpdate={(prevValues, curValues) =>
-                        prevValues.area !== curValues.area || prevValues.sights !== curValues.sights
-                      }
-                      >
-                      {() => (
+                    
                         <Form.Item
-                        {...field}
                         label="SubjectId"
-                        // name="subjectId"
-                        name={[field.name, 'subjectId']}
+                        name={['subjectId']}
                         rules={[
                           {
                               required: true,
@@ -312,25 +241,14 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
                           {/* <Select className='select-box' options={subjectOptions} onChange={handleChange} /> */}
                           
                         </Form.Item>
-                      )}
-                    </Form.Item>
                     </div>
                  </div>
 
-                  
-
                   <div className='columns'>
                     <div className='column is-flex is-justify-content-end'>
-                    <Form.Item
-                      shouldUpdate={(prevValues, curValues) =>
-                        prevValues.area !== curValues.area || prevValues.sights !== curValues.sights
-                      }
-                    >
-                      {() => (
                         <Form.Item
-                          {...field}
                           label="SlotId"
-                          name={[field.name, 'slotId']}
+                          name={['slotId']}
                           rules={[
                             {
                               required: true,
@@ -340,14 +258,11 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
                           >
                           <Select className='select-box' options={slot} onChange={handleChange} />
                         </Form.Item>
-                      )}
-                    </Form.Item>
                     </div>
                     <div className='column is-flex is-justify-content-end'>
                     <Form.Item
-                    {...field}
                     label="slotTime"
-                    name={[field.name, 'slotTime']}
+                    name={['slotTime']}
                     rules={[
                       {
                         required: true,
@@ -367,9 +282,8 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
                   <div className='column is-flex is-justify-content-end'>
 
                     <Form.Item
-                      {...field}
                       label="RoomId"
-                      name={[field.name, 'roomId']}
+                      name={['roomId']}
                       rules={[
                         {
                           required: true,
@@ -383,9 +297,8 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
                     </div>
                     <div className='column is-flex is-justify-content-end'>
                     <Form.Item
-                      {...field}
                       label="Class Name"
-                      name={[field.name, 'className']}
+                      name={['className']}
                       rules={[
                         {
                           required: true,
@@ -401,16 +314,10 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
 
                   <div className='columns pt-4'>
                   <div className='column is-flex is-justify-content-end'>
-                    <Form.Item
-                      shouldUpdate={(prevValues, curValues) =>
-                        prevValues.area !== curValues.area || prevValues.sights !== curValues.sights
-                      }
-                    >
-                      {() => (
+                    
                         <Form.Item
-                          {...field}
                           label="AccountId1"
-                          name={[field.name, 'accountId1']}
+                          name={['accountId1']}
                           rules={[
                             {
                               required: true,
@@ -437,21 +344,11 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
                             />
                           {/* <Select className='select-box' options={accounts} onChange={handleChange} /> */}
                         </Form.Item>
-                      )}
-                    </Form.Item>
                     </div>
                     <div className='column is-flex is-justify-content-end'>
-
-                    <Form.Item
-                      shouldUpdate={(prevValues, curValues) =>
-                        prevValues.area !== curValues.area || prevValues.sights !== curValues.sights
-                      }
-                      >
-                      {() => (
                         <Form.Item
-                        {...field}
                         label="AccountId2"
-                        name={[field.name, 'accountId2']}
+                        name={['accountId2']}
                         rules={[
                           {
                               required: true,
@@ -478,16 +375,13 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
                             />
                           {/* <Select className='select-box' options={accounts} onChange={handleChange} /> */}
                         </Form.Item>
-                      )}
-                    </Form.Item>
                     </div>
                  </div>
                   
                   <div className=''>
                     <Form.Item
-                        {...field}
                         label="Reason"
-                        name={[field.name, 'reason']}
+                        name={['reason']}
                         rules={[
                           {
                             required: true,
@@ -506,24 +400,9 @@ const ModalSlotContainer = ({handleCancel, planId}) => {
                     </Form.Item>
                     </div>
               </div>
-
-
-                  <div className='button-remove'>
-                    <MinusCircleOutlined onClick={() => remove(field.name)} />
-                  </div>
-                </Space>
               </div>
-            ))}
-
-            <Form.Item className='button-add'>
-              <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                Add
-              </Button>
-            </Form.Item>
           </>
-        )}
-      </Form.List>
-      <Form.Item className='button-submit'>
+      <Form.Item className='button-submit mx-5'>
         <Button type="primary" htmlType="submit" style={{width: "100%"}} >
           Submit
         </Button>

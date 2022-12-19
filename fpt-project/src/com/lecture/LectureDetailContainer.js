@@ -8,7 +8,7 @@ import { openNotificationWithIcon } from '../../request/notification';
 import FormItem from 'antd/es/form/FormItem';
 
 const LectureDetailContainer = (props) => {
-  const { record ,onCancel} = props;
+  const { record ,onCancel, requestData} = props;
   const [form] = Form.useForm();
   const campusId = localStorage.getItem('campusId');
   const userId = localStorage.getItem('userId');
@@ -60,19 +60,49 @@ const LectureDetailContainer = (props) => {
   }
 
   function showConfirm(fieldValues) {
+    console.log("11111111: ", fieldValues);
     confirm({
       title: 'Bạn đã chắc chắn nộp chưa?',
       content:
         'Khi nhấp vào nút OK, hộp thoại này sẽ đóng sau 1 giây',
       async onOk() {
         try {
-          const body = { ...fieldValues, ...values, "observationDetailRequests": observation };
+          const observationDetailRequests = []
+          if(!dataInput.listOfObservationDetail?.length > 0){
+            listData.map((e) => (
+              
+              observationDetailRequests.push({
+                code : "",
+                name: e.criteriaName,
+                point: parseInt(fieldValues[e.criteriaCode])
+              })
+            ))
+          } else {
+            dataInput.listOfObservationDetail.map((e) => (
+              observationDetailRequests.push({
+                code : "",
+                name: e.name,
+                point: parseInt(fieldValues[e.criteriaCode])
+              })
+            ))
+          }
+          const value = {
+            accountId: parseInt(userId),
+            advantage: fieldValues.advantage,
+            comment: fieldValues.comment,
+            disadvantage: fieldValues.disadvantage,
+            lessonName: fieldValues.lessonName,
+            observationSlotId: parseInt(record.id)
+          }
+          const body = {...value, observationDetailRequests}
           const { data } = await apiClient.post(`/api/lecture/create-observation-review`, body)
           if (data.status == '200') {
             openNotificationWithIcon("success","Thêm thanh công")
             setIndex(index + 1)
             onCancel()
             form.resetFields();
+            _requestData();
+            requestData()
           }
         } catch (e) {
           openNotificationWithIcon("error","Nộp thất bại")
@@ -159,21 +189,25 @@ const LectureDetailContainer = (props) => {
           <div>
 
             {dataInput.listOfObservationDetail?.length > 0 && dataInput.listOfObservationDetail.map((e, idx) => {
+              console.log("aaaaaaaa: " +JSON.stringify(e));
               return(
                 <div className='columns'>
                   <div className='column'>{idx + 1}</div>
                   <div className='column'>{e.name}</div>
                   <div className='column'>
-                    <FormItem
-                      name={idx}
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Missing semester',
-                        },
-                       ]}>
-                          <Input type="number" defaultValue={dataInput.listOfObservationDetail[idx].point} max={4} min={1} onChange={(e) => onPointChange(record, e, index)} />
-                    </FormItem>
+                    {/* <Form.List> */}
+
+                        <FormItem
+                          name={e.criteriaCode}
+                          rules={[
+                            {
+                              required: true,
+                              message: 'Missing semester',
+                            },
+                          ]}>
+                              <Input type="number" defaultValue={dataInput.listOfObservationDetail[idx].point} max={4} min={1} onChange={(e) => onPointChange(record, e, index)} />
+                        </FormItem>
+                    {/* </Form.List> */}
                   </div>
                 </div>
               )
@@ -183,21 +217,23 @@ const LectureDetailContainer = (props) => {
             <div>
 
               {listData?.length > 0 && listData.map((e, idx) => {
+                console.log("eeeee: " + JSON.stringify(e));
                 return(
                   <div className='columns'>
                   <div className='column'>{idx + 1}</div>
-                  <div className='column'>{e.name}</div>
+                  <div className='column'>{e.criteriaName}</div>
                   <div className='column'>
-                    <FormItem
-                      name={idx}
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Missing semester',
-                        },
-                       ]}>
-                      <Input type="number" max={4} min={1} onChange={(e) => onPointChange(record, e, index)} />
-                    </FormItem>
+                      <FormItem
+                        name={e.criteriaCode}
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Missing semester',
+                          },
+                        ]}>
+                        <Input type="number" max={4} min={1} onChange={(e) => onPointChange(record, e, index)} />
+                      </FormItem>
+                    {/* </Form.List> */}
                   </div>
                 </div>
                   )

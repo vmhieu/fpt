@@ -173,7 +173,7 @@ const PlanContainer = () => {
       key: 'slotTime',
       render: (text, record, idx) => (
         isUpdate && idx == index ?
-        <DatePicker style={{width: "13rem"}} onChange={(e) => onDatePickerChange(e, record)} disabledDate={(current) => {
+        <DatePicker defaultValue={moment(record.slotTime)} initialValues={record.slotTime} style={{width: "13rem"}} onChange={(e) => onDatePickerChange(e, record)} disabledDate={(current) => {
           console.log("");
           return moment().add(-1, 'days')  >= current 
           }}/>
@@ -426,7 +426,7 @@ const PlanContainer = () => {
             onClose={handleCancel}
             footer={null}
           >
-            <ModalSlotContainer handleCancel={handleCancel} planId={planId}/>
+            <ModalSlotContainer handleCancel={handleCancel} planId={planId} requestData={_requestData}/>
           </Drawer>
         </div>
         <Dialog

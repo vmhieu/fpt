@@ -7,46 +7,57 @@ import { apiClient } from '../request-api/api_client';
 import { useNavigate } from 'react-router-dom';
 
 
+const objPage = {
+    1: '/admin',
+    2: '/plan',
+    3: '/train',
+    4: '/lecture',
+    5: '/train'
+}
+
 const Login = () => {
     const [listCampus, setListCampus] = React.useState([])
-    const [campus , setCampus] = React.useState(null)
-    
+    const [campus, setCampus] = React.useState(null)
+
     const navigation = useNavigate()
     const _requestData = async () => {
-        const {data} = await apiClient.get('/api/campus-dropdown-list')
-        const convertData = data.map((i , idx) => {
+        const { data } = await apiClient.get('/api/campus-dropdown-list')
+        const convertData = data.map((i, idx) => {
             return {
-                value : i.value,
-                label : i.name
+                value: i.value,
+                label: i.name
             }
         })
         setListCampus(convertData)
     }
-    const handleLogin =async (ggApi) => {
+    const handleLogin = async (ggApi) => {
         console.log('gg', ggApi);
         localStorage.setItem("profileObj", JSON.stringify(ggApi.profileObj))
-        if(campus){
-            const body = {
-                token : ggApi.tokenId,
-                campusId : campus
-            }
-            const {data} = await apiClient.post('/auth/google' , body)
-            if(data.accessToken){
-                console.log('data' ,data);
-                const role = data.setRole.map(i => i.id)
-                console.log("role" , role);
-                
-                localStorage.setItem("access_token" , data.accessToken)
-                localStorage.setItem("campusId", data.campusId)
-                localStorage.setItem("userId", data.userId)
-                localStorage.setItem("role", JSON.stringify(role))
-
-                navigation('/admin')
-            }
-            
+        // if(campus){
+        const body = {
+            token: ggApi.tokenId,
+            campusId: campus
         }
+        // const { data } = await apiClient.post('/auth/google', body)
+        // if(data.accessToken){
+        // console.log('data', data);
+        // const role = data.setRole.map(i => i.id)
+        const role = [1]
+        console.log("role", role);
+
+        // localStorage.setItem("access_token", data.accessToken)
+        // localStorage.setItem("campusId", data.campusId)
+        // localStorage.setItem("userId", data.userId)
+        localStorage.setItem("role", JSON.stringify(role))
+        const page = objPage[role[0]];
+        console.log('page', page);
+
+        navigation(page)
+        // }
+
+        // }
     }
-    const onChange = (value) => {  
+    const onChange = (value) => {
         setCampus(value)
     };
     const onSearch = (value) => {
@@ -76,38 +87,38 @@ const Login = () => {
                 </div>
                 <div className='box-login'>
                     <div style={{ color: '#252525', fontSize: 32, fontWeight: 600 }}>Login</div>
-                        <div style={{margin: "20px 0"}}>
-                            <Select 
-                                size = 'large'
-                                showSearch
-                                placeholder="Choose campus"
-                                optionFilterProp="children"
-                                onChange={onChange}
-                                onSearch={onSearch}
-                                filterOption={(input, option) =>
-                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                                }
-                                options={listCampus}
-                                style={{width: "370px", alignItems : 'center'}}
-                                className='choose-campus'
-                            />
+                    <div style={{ margin: "20px 0" }}>
+                        <Select
+                            size='large'
+                            showSearch
+                            placeholder="Choose campus"
+                            optionFilterProp="children"
+                            onChange={onChange}
+                            onSearch={onSearch}
+                            filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            options={listCampus}
+                            style={{ width: "370px", alignItems: 'center' }}
+                            className='choose-campus'
+                        />
+                    </div>
+                    <div className='login-google'>
+                        <div style={{ marginTop: "5px", marginLeft: "15px" }}>
+                            <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSK5q0FP74VV9wbfwP378_7kj7iDomHuKrxkXsxDdUT28V9dlVMNUe-EMzaLwaFhneeuZI&usqp=CAU' width='28' style={{ alignItems: 'center' }} />
                         </div>
-                        <div className='login-google'>
-                            <div style={{marginTop: "5px", marginLeft: "15px"}}>
-                                <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSK5q0FP74VV9wbfwP378_7kj7iDomHuKrxkXsxDdUT28V9dlVMNUe-EMzaLwaFhneeuZI&usqp=CAU' width='28' style={{alignItems : 'center'}}/>
-                            </div>
-                            <GoogleLogin
-                                clientId={process.env.REACT_APP_GOOGLE_API_ID}
-                                buttonText="Sign in with @fpt.edu.vn"
-                                onSuccess={handleLogin}
-                                onFailure={handleFailLogin}
-                                cookiePolicy={'single_host_origin'}
-                                className='button-google'
-                                icon={false}
-                                style={{boxShadow: "none"}}
-                                >
-                            </GoogleLogin>
-                        </div>
+                        <GoogleLogin
+                            clientId={process.env.REACT_APP_GOOGLE_API_ID}
+                            buttonText="Sign in with @fpt.edu.vn"
+                            onSuccess={handleLogin}
+                            onFailure={handleFailLogin}
+                            cookiePolicy={'single_host_origin'}
+                            className='button-google'
+                            icon={false}
+                            style={{ boxShadow: "none" }}
+                        >
+                        </GoogleLogin>
+                    </div>
                 </div>
             </div>
         </div>

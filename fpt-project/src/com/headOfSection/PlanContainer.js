@@ -66,6 +66,12 @@ const PlanContainer = () => {
     const { data } = await apiClient.get(`/api/status-observation-plan?planId=${id}`)
     setStatus(dataStatus[data.items])
   }
+  useEffect(() => {
+    const role = localStorage.getItem('role');
+    if(!role.includes(2)){
+        navigation('/login');
+    }
+} ,[])
 
   const _requestData = async () => {
     const { data } = await apiClient.get(`/api/list-observation-slot?semesterId=${semesterId}&accountId=${userId}`)

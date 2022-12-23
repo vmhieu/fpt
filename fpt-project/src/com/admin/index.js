@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Radio } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import AdminLecture from './admin-lecture';
@@ -6,23 +6,27 @@ import AdminHOS from './admin-head-of-subject';
 import AdminTraining from './admin-training';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Footer';
+import Data from './data';
 
 const Admin = () => {
     const [adminIndex, setAdminIndex] = useState(1)
     const profileObj = JSON.parse(localStorage.getItem("profileObj"));
-    console.log('profileObj', profileObj);
-
-
-
+    const navigation = useNavigate()
     const objAdmin = {
         1: <AdminLecture />,
         2: <AdminHOS />,
-        3: <AdminTraining />
+        3: <AdminTraining />,
+        4: <Data />
     }
     const handleClick = (idx) => {
         setAdminIndex(idx)
     }
-    const navigation = useNavigate()
+    useEffect(() => {
+        const role = localStorage.getItem('role');
+        if(!role.includes(1)){
+            navigation('/login');
+        }
+    } ,[])
     return (
         <div>
             <div style={{ height: 60, background: '#0a8cf1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40 }}>
@@ -37,6 +41,9 @@ const Admin = () => {
                         </div>
                         <div className={adminIndex == 3 ? "position-header position-header-active" : "position-header"} onClick={() => handleClick(3)}>
                             Trưởng ban đào tạo
+                        </div>
+                        <div className={adminIndex == 4 ? "position-header position-header-active" : "position-header"} onClick={() => handleClick(4)}>
+                            Data
                         </div>
                     </div>
                 </div>

@@ -77,12 +77,13 @@ const apiClient = {
         throw err;
       });
   },
-  post: (url, data) => {
+  post: (url, data , headers = {}) => {
     // console.log('post ', { url }, { data });
     return request({
       method: "post",
       url,
       data,
+      headers
     })
       .then((response) => response)
       .catch((err) => {

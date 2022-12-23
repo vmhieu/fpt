@@ -36,7 +36,12 @@ const TrainingContainer = () => {
     })
     setListData(data.items);
   }
-
+  useEffect(() => {
+    const role = localStorage.getItem('role');
+    if(!role.includes(3) || !role.includes(5)){
+        navigation('/login');
+    }
+} ,[])
   const getSemesters = async () => {
     const {data} = await apiClient.get('/api/semester-list')
     setListSemesters(data);

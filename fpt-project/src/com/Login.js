@@ -33,29 +33,27 @@ const Login = () => {
     const handleLogin = async (ggApi) => {
         console.log('gg', ggApi);
         localStorage.setItem("profileObj", JSON.stringify(ggApi.profileObj))
-        // if(campus){
+        if(campus){
         const body = {
             token: ggApi.tokenId,
             campusId: campus
         }
-        // const { data } = await apiClient.post('/auth/google', body)
-        // if(data.accessToken){
-        // console.log('data', data);
-        // const role = data.setRole.map(i => i.id)
-        const role = [1]
+        const { data } = await apiClient.post('/auth/google', body)
+        if(data.accessToken){
+        console.log('data', data);
+        const role = data.setRole.map(i => i.id)
         console.log("role", role);
 
-        // localStorage.setItem("access_token", data.accessToken)
-        // localStorage.setItem("campusId", data.campusId)
-        // localStorage.setItem("userId", data.userId)
+        localStorage.setItem("access_token", data.accessToken)
+        localStorage.setItem("campusId", data.campusId)
+        localStorage.setItem("userId", data.userId)
         localStorage.setItem("role", JSON.stringify(role))
         const page = objPage[role[0]];
-        console.log('page', page);
 
         navigation(page)
-        // }
+        }
 
-        // }
+        }
     }
     const onChange = (value) => {
         setCampus(value)

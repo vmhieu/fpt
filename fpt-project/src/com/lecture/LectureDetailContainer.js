@@ -8,7 +8,7 @@ import { openNotificationWithIcon } from '../../request/notification';
 import FormItem from 'antd/es/form/FormItem';
 
 const LectureDetailContainer = (props) => {
-  const { record ,onCancel, requestData} = props;
+  const { record ,onCancel, requestData, open} = props;
   const [form] = Form.useForm();
   const campusId = localStorage.getItem('campusId');
   const userId = localStorage.getItem('userId');
@@ -20,6 +20,9 @@ const LectureDetailContainer = (props) => {
   const [loading, setLoading] = useState(false);
 
 
+  useEffect(() => {
+    getDetailLecture();
+  }, [open])
   const { confirm } = Modal;
 
   const _requestData = async () => {

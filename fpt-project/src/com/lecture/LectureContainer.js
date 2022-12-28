@@ -139,7 +139,7 @@ const LectureContainer = () => {
         onClose={handleCancel}
         footer={null}
       >
-        {detail.id && <LectureDetailContainer record={detail} onCancel={handleCancel} requestData={_requestData}/>}
+        {detail.id && <LectureDetailContainer record={detail} onCancel={handleCancel} requestData={_requestData} open={open}/>}
       </Drawer>
       <div className='columns'>
         <div className='column ml-4 is-1 mr-6'>
